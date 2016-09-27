@@ -1,0 +1,32 @@
+---
+layout: default
+---
+<nav class="blue">
+    <div class="nav-wrapper">
+        <div class="container">
+            <a href="{{ "/settings/" | prepend: site.baseurl }}" class="brand-logo">
+                <i class="material-icons">
+                    settings
+                </i>
+            </a>
+            <ul class="right">
+                <li>
+                    <a href="{{ "/settings/students/" | prepend: site.baseurl }}">
+                        Students
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ "/settings/products/" | prepend: site.baseurl }}">
+                        Products
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ "/settings/other/" | prepend: site.baseurl }}">
+                        Other
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+{{ content }}

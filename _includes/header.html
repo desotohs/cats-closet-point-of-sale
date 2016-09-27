@@ -1,0 +1,56 @@
+{% if page.hideFAB %}{% else %}
+<div class="fixed-action-btn vertical">
+    <a class="btn-floating btn-large red">
+        <i class="large material-icons">
+            add
+        </i>
+    </a>
+    <ul>
+        <li>
+            <abbr title="Log Out">
+                <a class="btn-floating red" href="{{ "/" | prepend: site.baseurl }}">
+                    <i class="material-icons">
+                        exit_to_app
+                    </i>
+                </a>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Office">
+                <a class="btn-floating yellow darken-1" href="{{ "/office/" | prepend: site.baseurl }}">
+                    <i class="material-icons">
+                        attach_money
+                    </i>
+                </a>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Store">
+                <a class="btn-floating green" href="{{ "/store/" | prepend: site.baseurl }}">
+                    <i class="material-icons">
+                        shopping_cart
+                    </i>
+                </a>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Settings">
+                <a class="btn-floating blue" href="{{ "/settings/" | prepend: site.baseurl }}">
+                    <i class="material-icons">
+                        settings
+                    </i>
+                </a>
+            </abbr>
+        </li>
+        <li>
+            <abbr title="Bug Report">
+                <a class="btn-floating red" href="//github.com/zachdeibert/cats-closet-point-of-sale/issues/new" target="_blank">
+                    <i class="material-icons">
+                        bug_report
+                    </i>
+                </a>
+            </abbr>
+        </li>
+    </ul>
+</div>
+{% endif %}

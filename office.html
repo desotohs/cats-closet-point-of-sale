@@ -1,3 +1,111 @@
 ---
 layout: default
+script: /js/office.js
 ---
+<div class="full-height container" id="step-1">
+    <div class="row">
+        <div class="col s12 center">
+            <h4 class="white-text">
+                Please scan the card of the customer.
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-yellow-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form action="#step-2" method="GET">
+        <input type="text" name="barcode" id="barcode" autocomplete="off" autofocus />
+    </form>
+</div>
+<div class="full-height container" id="step-2">
+    <div class="row">
+        <div class="col s12 center">
+            <h4 class="white-text">
+                Please enter the amount to add to the customer.
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s8">
+            <div class="collection with-header">
+                <a class="collection-item">
+                    <h4 ng-bind="customer.name"></h4>
+                </a>
+                <a class="collection-item" ng-repeat="property in customer.properties">
+                    <span ng-bind="property.name"></span>:
+                    <span ng-bind="property.value"></span>
+                </a>
+            </div>
+        </div>
+        <div class="col s4">
+            <img ng-src="{{ "{{" }}customer.picture}}" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <div class="collection">
+                <form action="#step-3" method="GET">
+                    <a class="collection-item">
+                        Current Balance:
+                        $<span ng-bind="customer.balance"></span>
+                    </a>
+                    <a class="collection-item">
+                        <input placeholder="Deposit Amount" type="number" min="0" name="deposit" id="deposit" class="validate" ng-model="deposit" />
+                    </a>
+                    <a class="collection-item">
+                        New Balance:
+                        $<span ng-bind="customer.balance + deposit"></span>
+                    </a>
+                    <a class="collection-item">
+                        <button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="!deposit || deposit <= 0">
+                            Submit
+                            <i class="material-icons right">
+                                send
+                            </i>
+                        </button>
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container full-height" id="step-3">
+    <div class="row">
+        <div class="col s12 center">
+            <h4 class="white-text">
+                Depositing...
+            </h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-yellow-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

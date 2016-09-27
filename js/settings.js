@@ -48,11 +48,18 @@ function angularCallback($scope) {
         "price": 0,
         "enabled": true
     };
+    $scope.taxPercent = 0.08;
     $scope.isCustomer = function(name) {
         return name && $scope.customers.indexOf(name) >= 0;
     };
     $scope.selectProduct = function(product) {
         $scope.selectedProduct = product;
+    };
+    $scope.removeProperty = function($index) {
+        $scope.customProperties.splice($index, 1);
+    };
+    $scope.addProperty = function() {
+        $scope.customProperties.push(prompt("What should the new property be called?"));
     };
     var map = {};
     for ( var i = 0; i < $scope.customers.length; ++i ) {

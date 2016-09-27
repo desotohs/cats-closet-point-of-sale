@@ -14,13 +14,7 @@
             {% include footer.html %}
         </footer>
         <script>
-            var app = angular.module("app", []);
-            app.controller("controller", function($scope) {
-                if ( window.angularCallback ) {
-                    angularCallback($scope);
-                }
-                window.$scope = $scope;
-            });
+            angularInit();
         </script>
     </body>
 </html>

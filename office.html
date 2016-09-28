@@ -27,7 +27,7 @@ script: /js/office.js
             </div>
         </div>
     </div>
-    <form action="#step-2" method="GET">
+    <form action="#step-2" method="GET" onsubmit="return office.onBarcodeScan()">
         <input type="text" name="barcode" id="barcode" autocomplete="off" autofocus />
     </form>
 </div>
@@ -58,20 +58,20 @@ script: /js/office.js
     <div class="row">
         <div class="col s12">
             <div class="collection">
-                <form action="#step-3" method="GET">
+                <form action="#step-3" method="GET" onsubmit="return office.deposit()">
                     <a class="collection-item">
                         Current Balance:
                         $<span ng-bind="customer.balance"></span>
                     </a>
                     <a class="collection-item">
-                        <input placeholder="Deposit Amount" type="number" min="0" name="deposit" id="deposit" class="validate" ng-model="deposit" />
+                        <input placeholder="Deposit Amount" type="number" min="0" name="deposit" id="deposit" ng-model="deposit" />
                     </a>
                     <a class="collection-item">
                         New Balance:
                         $<span ng-bind="customer.balance + deposit"></span>
                     </a>
                     <a class="collection-item">
-                        <button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="!deposit || deposit <= 0">
+                        <button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="!deposit || deposit <= 0" onclick="office.deposit()">
                             Submit
                             <i class="material-icons right">
                                 send

@@ -80,6 +80,8 @@
     <Compile Include="Apis\Purchase.cs" />
     <Compile Include="Model\Requests\PurchaseRequest.cs" />
     <Compile Include="Model\Responses\KeyValuePair.cs" />
+    <Compile Include="Apis\Deposit.cs" />
+    <Compile Include="Model\Requests\DepositRequest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

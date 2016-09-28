@@ -1,48 +1,50 @@
 var office = {
     "initModel": function($scope) {
-        $scope.customer = {
-            "name": "Obi-Wan Kenobi",
-            "balance": 100,
-            "picture": "http://vignette3.wikia.nocookie.net/swfanon/images/e/e1/Obiwankenobi_dsws.jpg/revision/latest?cb=20081204152935",
-            "properties": [
-                {
-                    "name": "Gender",
-                    "value": "Male"
-                },
-                {
-                    "name": "Email",
-                    "value": "kenobobi000@example.com"
-                }
-            ]
-        };
+        $scope.customer = {};
         $scope.deposit = 0;
         $("#barcode").val("");
+        office.allowScan = true;
     },
     "onBarcodeScan": function() {
-        location.href = "#step-2";
+        office.allowScan = false;
+        pull(office.$http, "/customer", {
+            "barcode": $("#barcode").val()
+        }, $scope, "customer", function() {
+            location.href = "#step-2";
+        });
         return false;
     },
     "deposit": function() {
         location.href = "#step-3";
-        setTimeout(function() {
-            location.href = "#step-1";
-            office.$scope.$apply(function() {
-                office.initModel(office.$scope);
-            });
-        }, 1000);
+        var fakeScope = {};
+        pull(office.$http, "/deposit", {
+            "barcode": $("#barcode").val(),
+            "amount": office.$scope.deposit
+        }, fakeScope, "status", function() {
+            if ( fakeScope.status.success ) {
+                location.href = "#step-1";
+                office.initModel(office.$scope, office.$http);
+            } else {
+                alert("Unable to deposit money");
+                location.href = "#step-2";
+            }
+        });
         return false;
     }
 };
 
-function angularCallback($scope) {
+function angularCallback($scope, $http) {
     office.initModel($scope);
     office.$scope = $scope;
+    office.$http = $http;
 }
 
 window.onkeypress = function(e) {
-    if ( e.keyCode == 13 ) {
-        office.onBarcodeScan();
-    } else if ( e.key.length == 1 ) {
-        $("#barcode").val($("#barcode").val() + e.key);
+    if ( office.allowScan ) {
+        if ( e.keyCode == 13 ) {
+            office.onBarcodeScan();
+        } else if ( e.key.length == 1 ) {
+            $("#barcode").val($("#barcode").val() + e.key);
+        }
     }
 };

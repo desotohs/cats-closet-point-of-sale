@@ -1,40 +1,17 @@
 var store = {
-    "initModel": function($scope) {
-        $scope.customer = {
-            "name": "Obi-Wan Kenobi",
-            "balance": 100,
-            "picture": "http://vignette3.wikia.nocookie.net/swfanon/images/e/e1/Obiwankenobi_dsws.jpg/revision/latest?cb=20081204152935",
-            "properties": [
-                {
-                    "name": "Gender",
-                    "value": "Male"
-                },
-                {
-                    "name": "Email",
-                    "value": "kenobobi000@example.com"
-                }
-            ]
-        };
-        $scope.products = [
-            {
-                "name": "Lightsaber",
-                "desc": "Green",
-                "picture": "http://www.sciencefriday.com/wp-content/uploads/2015/12/lightsaber6.jpg",
-                "price": 10
-            },
-            {
-                "name": "Lightsaber",
-                "desc": "Purple",
-                "picture": "https://s-media-cache-ak0.pinimg.com/564x/fe/85/c2/fe85c2488c48ca28fedb31c1adbe07d9.jpg",
-                "price": 15
-            }
-        ];
+    "initModel": function($scope, $http) {
+        $scope.customer = {};
+        pull($http, "/products/enabled", {}, $scope, "products");
         $scope.purchases = [];
         $scope.total = 0;
         $("#barcode").val("");
     },
     "onBarcodeScan": function() {
-        location.href = "#step-2";
+        pull(store.$http, "/customer", {
+            "barcode": $("#barcode").val()
+        }, $scope, "customer", function() {
+            location.href = "#step-2";
+        });
         return false;
     },
     "verifyAccount": function() {
@@ -43,18 +20,29 @@ var store = {
     },
     "purchase": function() {
         location.href = "#step-4";
-        setTimeout(function() {
-            location.href = "#step-1";
-            store.$scope.$apply(function() {
-                store.initModel(store.$scope);
-            });
-        }, 1000);
+        var purchases = [];
+        for ( var i = 0; i < store.$scope.purchases.length; ++i ) {
+            purchases[i] = store.$scope.purchases[i].product.id;
+        }
+        var fakeScope = {};
+        pull(store.$http, "/purchase", {
+            "barcode": $("#barcode").val(),
+            "purchases": purchases
+        }, fakeScope, "status", function() {
+            if ( fakeScope.status.success ) {
+                location.href = "#step-1";
+                store.initModel(store.$scope, store.$http);
+            } else {
+                alert("Unable to purchase items");
+                location.href = "#step-3";
+            }
+        });
         return false;
     }
 };
 
-function angularCallback($scope) {
-    store.initModel($scope);
+function angularCallback($scope, $http) {
+    store.initModel($scope, $http);
     $scope.buy = function($index) {
         $scope.purchases.push({
             "product": $scope.products[$index]
@@ -66,6 +54,7 @@ function angularCallback($scope) {
         $scope.total -= purchase.product.price;
     };
     store.$scope = $scope;
+    store.$http = $http;
 }
 
 window.onkeypress = function(e) {

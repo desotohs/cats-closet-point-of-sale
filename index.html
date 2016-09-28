@@ -1,6 +1,7 @@
 ---
 layout: default
 hideFAB: true
+script: /js/login.js
 ---
 <div class="valign-wrapper full-height blue accent-3">
     <div class="valign center-align halign indigo accent-4 z-depth-4">
@@ -11,7 +12,7 @@ hideFAB: true
                 </h2>
             </div>
             <div class="row">
-                <form class="col s12" action="{{ "/welcome/" | prepend: site.baseurl }}" method="GET">
+                <form class="col s12" action="{{ "/welcome/" | prepend: site.baseurl }}" method="GET" onsubmit="return login.login()">
                     <div class="row">
                         <div class="input-field col s12">
                             <input placeholder="Server" name="server" id="server" type="text" class="validate white-text" />

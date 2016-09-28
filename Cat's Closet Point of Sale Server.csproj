@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{73396782-71AC-4D3F-B54F-1A5CCE163015}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CatsCloset</RootNamespace>
+    <AssemblyName>cats-closet-point-of-sale</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Externalconsole>true</Externalconsole>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="MySql.Data">
+      <HintPath>packages\MySql.Data.6.9.9\lib\net45\MySql.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="MySql.Data.Entity.EF6">
+      <HintPath>packages\MySql.Data.Entity.6.9.9\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="FastCGI">
+      <HintPath>lib\FastCGI\FastCGI.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Model\Customer.cs" />
+    <Compile Include="Model\Image.cs" />
+    <Compile Include="Model\CustomerProperty.cs" />
+    <Compile Include="Model\CustomProperty.cs" />
+    <Compile Include="Model\Product.cs" />
+    <Compile Include="Model\Option.cs" />
+    <Compile Include="Model\Context.cs" />
+    <Compile Include="Main\Program.cs" />
+    <Compile Include="Model\User.cs" />
+    <Compile Include="Apis\IApi.cs" />
+    <Compile Include="Apis\AbstractApi.cs" />
+    <Compile Include="Apis\ApiFactory.cs" />
+    <Compile Include="Apis\TestApi.cs" />
+    <Compile Include="Model\Requests\EmptyRequest.cs" />
+    <Compile Include="Model\Responses\StatusResponse.cs" />
+    <Compile Include="Apis\CustomerList.cs" />
+    <Compile Include="Model\Requests\BarcodeRequest.cs" />
+    <Compile Include="Apis\GetCustomer.cs" />
+    <Compile Include="Model\Responses\CustomerResponse.cs" />
+    <Compile Include="Apis\ProductList.cs" />
+    <Compile Include="Model\Responses\ProductResponse.cs" />
+    <Compile Include="Apis\PropertyList.cs" />
+    <Compile Include="Apis\OptionList.cs" />
+    <Compile Include="Apis\EnabledProducts.cs" />
+    <Compile Include="Apis\Purchase.cs" />
+    <Compile Include="Model\Requests\PurchaseRequest.cs" />
+    <Compile Include="Model\Responses\KeyValuePair.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ProjectExtensions>
+    <MonoDevelop>
+      <Properties>
+        <Policies>
+          <DotNetNamingPolicy DirectoryNamespaceAssociation="PrefixedHierarchical" ResourceNamePolicy="FileFormatDefault" />
+        </Policies>
+      </Properties>
+    </MonoDevelop>
+  </ProjectExtensions>
+  <ItemGroup>
+    <Folder Include="Model\" />
+    <Folder Include="Main\" />
+    <Folder Include="Apis\" />
+    <Folder Include="Model\Requests\" />
+    <Folder Include="Model\Responses\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+</Project>

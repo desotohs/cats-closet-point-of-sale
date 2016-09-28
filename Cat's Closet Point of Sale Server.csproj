@@ -82,6 +82,8 @@
     <Compile Include="Model\Responses\KeyValuePair.cs" />
     <Compile Include="Apis\Deposit.cs" />
     <Compile Include="Model\Requests\DepositRequest.cs" />
+    <Compile Include="Apis\Image.cs" />
+    <Compile Include="Apis\Magic.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

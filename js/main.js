@@ -17,8 +17,22 @@ function angularInit() {
     });
 }
 
+function transformPictures(obj, server) {
+    if ( typeof(obj) == "string" ) {
+        return;
+    }
+    if ( obj["picture"] ) {
+        obj["picture"] = server + obj["picture"];
+    }
+    var properties = Object.getOwnPropertyNames(obj);
+    for ( var i = 0; i < properties.length; ++i ) {
+        transformPictures(obj[properties[i]], server);
+    }
+}
+
 function pull($http, url, data, $scope, field, callback) {
     $http.post(sessionStorage.server + url, data).then(function(resp) {
+        transformPictures(resp.data, sessionStorage.server);
         $scope[field] = resp.data;
         if ( callback ) {
             callback();

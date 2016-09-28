@@ -5,7 +5,7 @@ using CatsCloset.Model;
 
 namespace CatsCloset.Apis {
 	public abstract class AbstractApi<TReq, TRes> : IApi {
-		private readonly string Url;
+		protected readonly string Url;
 
 		public Context Context {
 			protected get;

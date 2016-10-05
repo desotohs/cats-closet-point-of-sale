@@ -18,7 +18,7 @@ function angularInit() {
 }
 
 function transformPictures(obj, server) {
-    if ( typeof(obj) == "string" ) {
+    if ( obj == null || typeof(obj) == "string" ) {
         return;
     }
     if ( obj["picture"] ) {

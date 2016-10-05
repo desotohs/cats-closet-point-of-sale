@@ -114,6 +114,9 @@ script: /js/store.js
                             </i>
                         </button>
                     </form>
+                    <p class="red-text" ng-show="total < 0 || total > customer.balance">
+                        NOT ENOUGH MONEY IN ACCOUNT
+                    </p>
                 </div>
             </div>
         </div>

@@ -1,56 +1,111 @@
-function angularCallback($scope) {
-    $scope.customers = [
-        "Obi-Wan Kenobi",
-        "Yoda",
-        "Vader",
-        "R2D2"
-    ];
-    $scope.customer = {
-        "name": "Obi-Wan Kenobi",
-        "balance": 100,
-        "picture": "http://vignette3.wikia.nocookie.net/swfanon/images/e/e1/Obiwankenobi_dsws.jpg/revision/latest?cb=20081204152935",
-        "code": "012345",
-        "properties": [
-            {
-                "name": "Gender",
-                "value": "Male"
-            },
-            {
-                "name": "Email",
-                "value": "kenobobi000@example.com"
+var settings = {
+    "initModel": function($scope, $http) {
+        pull($http, "/customers", {}, $scope, "customers", function() {
+            var map = {};
+            for ( var i = 0; i < $scope.customers.length; ++i ) {
+                map[$scope.customers[i]] = null;
             }
-        ]
-    };
-    $scope.products = [
-        {
-            "name": "Lightsaber",
-            "desc": "Green",
-            "picture": "http://www.sciencefriday.com/wp-content/uploads/2015/12/lightsaber6.jpg",
-            "price": 10,
+            $("#customer").autocomplete({
+                data: map
+            });
+        });
+        pull($http, "/products", {}, $scope, "products");
+        pull($http, "/properties", {}, $scope, "customProperties");
+        var fakescope = {};
+        pull($http, "/option", {
+            "name": "Tax"
+        }, fakescope, "result", function() {
+            $scope.taxPercent = parseFloat(fakescope.result.value);
+        });
+        $scope.customer = {};
+        $scope.newProduct = {
+            "name": "",
+            "desc": "",
+            "picture": "",
+            "price": 0,
             "enabled": true
-        },
-        {
-            "name": "Lightsaber",
-            "desc": "Purple",
-            "picture": "https://s-media-cache-ak0.pinimg.com/564x/fe/85/c2/fe85c2488c48ca28fedb31c1adbe07d9.jpg",
-            "price": 15,
-            "enabled": true
-        }
-    ];
-    $scope.customProperties = [
-        "Gender",
-        "Email"
-    ];
-    $scope.newProduct = {
-        "name": "",
-        "desc": "",
-        "picture": "",
-        "price": 0,
-        "enabled": true
-    };
-    $scope.taxPercent = 0.08;
+        };
+    },
+    "saveCustomer": function() {
+        var fakescope = {};
+        pull($http, "/customer/save", $scope.customer, fakescope, "result", function() {
+            if ( fakescope.result.success ) {
+                Materialize.toast("Customer saved!", 4000);
+            } else {
+                alert("Customer save failed!");
+            }
+        });
+        return false;
+    },
+    "addCustomer": function() {
+        settings.$scope.customer = {
+            "name": settings.$scope.customername,
+            "properties": [],
+            "isNew": true
+        };
+        var fakescope = {};
+        pull($http, "/properties", {}, fakescope, "result", function() {
+            for ( var i = 0; i < fakescope.result.length; ++i ) {
+                settings.$scope.customer.properties.push({
+                    "name": fakescope.result[i],
+                    "value": ""
+                });
+            }
+        });
+    },
+    "saveProduct": function() {
+        var fakescope = {};
+        pull($http, "/product/save", settings.$scope.selectedProduct, fakescope, "result", function() {
+            if ( fakescope.result.success ) {
+                alert("Product saved!");
+                // primary key must be calculated into the product $scope
+                location.reload();
+            } else {
+                alert("Unable to save product");
+            }
+        });
+        return false;
+    },
+    "saveTaxes": function() {
+        var fakescope = {};
+        pull($http, "/option/save", {
+            "name": "Tax",
+            "value": settings.$scope.taxPercent
+        }, fakescope, "result", function() {
+            if ( fakescope.result.success ) {
+                Materialize.toast("Taxes saved!", 4000);
+            } else {
+                alert("Taxes save failed!");
+            }
+        });
+        return false;
+    },
+    "saveProperties": function() {
+        var fakescope = {};
+        pull($http, "/properties/save", settings.$scope.customProperties, fakescope, "result", function() {
+            if ( fakescope.result.success ) {
+                Materialize.toast("Properties saved!", 4000);
+            } else {
+                alert("Properties save failed!");
+            }
+        });
+        return false;
+    }
+};
+
+function angularCallback($scope, $http) {
+    settings.initModel($scope, $http);
     $scope.isCustomer = function(name) {
-        return name && $scope.customers.indexOf(name) >= 0;
+        return name && $scope.customers.indexOf(name) >= 0 || ($scope.customer.isNew && name == $scope.customer.name);
+    };
+    $scope.pullCustomer = function(name) {
+        if ( $scope.isCustomer(name) ) {
+            pull($http, "/customer", {
+                "name": name
+            }, $scope, "customer");
+        } else {
+            $scope.customer = {};
+        }
     };
     $scope.selectProduct = function(product) {
         $scope.selectedProduct = product;
@@ -61,11 +116,6 @@ function angularCallback($scope) {
     $scope.addProperty = function() {
         $scope.customProperties.push(prompt("What should the new property be called?"));
     };
-    var map = {};
-    for ( var i = 0; i < $scope.customers.length; ++i ) {
-        map[$scope.customers[i]] = null;
-    }
-    $("#customer").autocomplete({
-        data: map
-    });
+    settings.$scope = $scope;
+    settings.$http = $http;
 }

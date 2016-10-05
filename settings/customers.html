@@ -6,10 +6,10 @@ layout: setting
         <div class="col s12">
             <div class="collection with-header">
                 <div class="collection-item input-field">
-                    <input placeholder="Customer Name" type="text" id="customer" name="customer" ng-model="customername" class="autocomplete" />
+                    <input placeholder="Customer Name" type="text" id="customer" name="customer" ng-model="customername" ng-change="pullCustomer(customername)" class="autocomplete" />
                 </div>
                 <div class="collection-item" ng-hide="!customername || isCustomer(customername)">
-                    <button class="btn waves-effect waves-light" type="submit" name="action">
+                    <button class="btn waves-effect waves-light" type="submit" name="action" onclick="settings.addCustomer()">
                         <i class="material-icons right">
                             add
                         </i>
@@ -46,7 +46,7 @@ layout: setting
                         </div>
                     </div>
                     <div class="collection-item">
-                        <form action="#" method="GET">
+                        <form action="#" method="GET" onclick="return settings.saveCustomer()">
                             <button class="btn waves-effect waves-light" type="submit" name="action">
                                 Save
                                 <i class="material-icons right">

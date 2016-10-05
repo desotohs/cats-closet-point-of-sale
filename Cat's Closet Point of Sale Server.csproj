@@ -69,7 +69,6 @@
     <Compile Include="Model\Requests\EmptyRequest.cs" />
     <Compile Include="Model\Responses\StatusResponse.cs" />
     <Compile Include="Apis\CustomerList.cs" />
-    <Compile Include="Model\Requests\BarcodeRequest.cs" />
     <Compile Include="Apis\GetCustomer.cs" />
     <Compile Include="Model\Responses\CustomerResponse.cs" />
     <Compile Include="Apis\ProductList.cs" />
@@ -84,6 +83,15 @@
     <Compile Include="Model\Requests\DepositRequest.cs" />
     <Compile Include="Apis\Image.cs" />
     <Compile Include="Apis\Magic.cs" />
+    <Compile Include="Model\Requests\OptionRequest.cs" />
+    <Compile Include="Apis\GetOption.cs" />
+    <Compile Include="Model\Requests\CustomerRequest.cs" />
+    <Compile Include="Apis\SetCustomer.cs" />
+    <Compile Include="Model\Requests\SaveCustomerRequest.cs" />
+    <Compile Include="Apis\SetProduct.cs" />
+    <Compile Include="Model\Requests\SaveProductRequest.cs" />
+    <Compile Include="Apis\SetOption.cs" />
+    <Compile Include="Apis\SetProperties.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

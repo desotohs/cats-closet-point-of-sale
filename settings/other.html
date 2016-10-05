@@ -2,7 +2,7 @@
 layout: setting
 ---
 <div class="container">
-    <form action="#" method="GET">
+    <form action="#" method="GET" onsubmit="return settings.saveTaxes()">
         <div class="row">
             <div class="col s1"></div>
             <div class="col s10 center">
@@ -15,7 +15,7 @@ layout: setting
             <div class="col s1"></div>
             <div class="col s10 input-field white-text">
                 Tax Percent:
-                <input type="number" min="0" max="1" ng-model="taxPercent" />
+                <input type="text" min="0" max="1" ng-model="taxPercent" />
             </div>
         </div>
         <div class="row">
@@ -31,7 +31,7 @@ layout: setting
         </div>
     </form>
     <hr />
-    <form action="#" method="GET">
+    <form action="#" method="GET" onsubmit="return settings.saveProperties()">
         <div class="row">
             <div class="col s1"></div>
             <div class="col s10 center">

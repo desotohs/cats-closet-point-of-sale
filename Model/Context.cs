@@ -37,6 +37,11 @@ namespace CatsCloset.Model {
 			get;
 			set;
 		}
+
+		public virtual DbSet<SessionMessage> SessionMessages {
+			get;
+			set;
+		}
 	}
 }
 

@@ -24,6 +24,7 @@ namespace CatsCloset.Apis {
 				}
 			}
 			Context.SaveChanges();
+			return new StatusResponse(true);
 		}
 
 		public SetProperties() : base("/properties/save") {

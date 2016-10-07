@@ -92,6 +92,12 @@
     <Compile Include="Model\Requests\SaveProductRequest.cs" />
     <Compile Include="Apis\SetOption.cs" />
     <Compile Include="Apis\SetProperties.cs" />
+    <Compile Include="Model\SessionMessage.cs" />
+    <Compile Include="Apis\HasSessionResponded.cs" />
+    <Compile Include="Model\Requests\SessionRequest.cs" />
+    <Compile Include="Apis\SessionSend.cs" />
+    <Compile Include="Model\Responses\SessionDataResponse.cs" />
+    <Compile Include="Apis\SessionReceive.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

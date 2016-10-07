@@ -39,6 +39,10 @@ function angularCallback($scope, $http) {
     office.$http = $http;
 }
 
+function sufficientPermissions(permissions) {
+    return permissions.office;
+}
+
 window.onkeypress = function(e) {
     if ( office.allowScan ) {
         if ( e.keyCode == 13 ) {

@@ -98,6 +98,11 @@
     <Compile Include="Apis\SessionSend.cs" />
     <Compile Include="Model\Responses\SessionDataResponse.cs" />
     <Compile Include="Apis\SessionReceive.cs" />
+    <Compile Include="Model\Responses\PermissionResponse.cs" />
+    <Compile Include="Apis\PermissionsList.cs" />
+    <Compile Include="Apis\Authenticate.cs" />
+    <Compile Include="Model\Requests\AuthenticateRequest.cs" />
+    <Compile Include="Model\Responses\TokenResponse.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

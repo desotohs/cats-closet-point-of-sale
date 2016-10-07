@@ -14,12 +14,17 @@ namespace CatsCloset.Model {
 			set;
 		}
 
-		public string Password {
+		public byte[] PasswordHash {
 			get;
 			set;
 		}
 
-		public string Hash {
+		public byte[] Salt {
+			get;
+			set;
+		}
+
+		public string Token {
 			get;
 			set;
 		}

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using FastCGI;
 using CatsCloset.Apis;
@@ -20,10 +22,34 @@ namespace CatsCloset.Main {
 			}
 		}
 
+		private static void EnsureUserExists() {
+			if ( !ctx.Users.Any() ) {
+				User user = new User();
+				user.Username = "admin";
+				RandomNumberGenerator rng = RandomNumberGenerator.Create();
+				byte[] salt = new byte[256];
+				rng.GetBytes(salt);
+				user.Salt = salt;
+				user.PasswordHash = HashAlgorithm.Create("sha512")
+					.ComputeHash(
+						Encoding.UTF8.GetBytes(
+							"admin")
+						.Concat(
+							salt)
+						.ToArray());
+				user.OfficeAccess = true;
+				user.SettingsAccess = true;
+				user.StoreAccess = true;
+				ctx.Users.Add(user);
+				ctx.SaveChanges();
+			}
+		}
+
 		public static void Main(string[] args) {
 			ctx = new Context();
 			ctx.Database.CreateIfNotExists();
 			ctx.Database.Initialize(false);
+			EnsureUserExists();
 			FCGIApplication app = new FCGIApplication();
 			app.OnRequestReceived += HandleRequest;
 			app.Listen(new IPEndPoint(IPAddress.Any, 9000));

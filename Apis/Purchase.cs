@@ -7,6 +7,7 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class Purchase : AbstractApi<PurchaseRequest, StatusResponse> {
 		protected override StatusResponse Handle(PurchaseRequest req) {
+			AccessRequire(RequireAuthentication().StoreAccess);
 			double cost = req.purchases
 				.Select(
 					i => Context.Products

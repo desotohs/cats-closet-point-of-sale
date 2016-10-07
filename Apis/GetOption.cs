@@ -7,6 +7,7 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class GetOption : AbstractApi<OptionRequest, KeyValuePair> {
 		protected override KeyValuePair Handle(OptionRequest req) {
+			RequireAuthentication();
 			Option opt = Context.Options
 				.First(
 					o => o.Key == req.name);

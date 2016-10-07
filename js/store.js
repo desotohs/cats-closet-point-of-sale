@@ -57,6 +57,10 @@ function angularCallback($scope, $http) {
     store.$http = $http;
 }
 
+function sufficientPermissions(permissions) {
+    return permissions.store;
+}
+
 window.onkeypress = function(e) {
     if ( e.keyCode == 13 ) {
         store.onBarcodeScan();

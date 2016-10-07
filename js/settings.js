@@ -119,3 +119,7 @@ function angularCallback($scope, $http) {
     settings.$scope = $scope;
     settings.$http = $http;
 }
+
+function sufficientPermissions(permissions) {
+    return permissions.settings;
+}

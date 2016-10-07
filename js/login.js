@@ -4,7 +4,27 @@
 var login = {
     "login": function() {
         sessionStorage.server = $("#server").val();
-        location.href = "{{ "/welcome/" | prepend: site.baseurl }}";
+        var fakescope = {};
+        pull(login.$http, "/authenticate", {
+            "username": $("#username").val(),
+            "password": $("#password").val()
+        }, fakescope, "result", function() {
+            if ( fakescope.result.token ) {
+                sessionStorage.token = fakescope.result.token;
+                location.href = "{{ "/welcome/" | prepend: site.baseurl }}";
+            } else {
+                Materialize.toast("Invalid credentials", 4000);
+            }
+        });
         return false;
+    },
+    "init": function() {
+        sessionStorage.token = "";
     }
 };
+
+function angularCallback($scope, $http) {
+    login.$http = $http;
+}
+
+login.init();

@@ -7,6 +7,7 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class SetProduct : AbstractApi<SaveProductRequest, StatusResponse> {
 		protected override StatusResponse Handle(SaveProductRequest req) {
+			AccessRequire(RequireAuthentication().SettingsAccess);
 			Product product = Context.Products
 				.FirstOrDefault(
 					p => p.Id == req.id);

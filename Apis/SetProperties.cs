@@ -7,6 +7,7 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class SetProperties : AbstractApi<IEnumerable<string>, StatusResponse> {
 		protected override StatusResponse Handle(IEnumerable<string> req) {
+			AccessRequire(RequireAuthentication().SettingsAccess);
 			foreach ( CustomProperty prop in Context.CustomProperties.Where(p => !req.Contains(p.Name)) ) {
 				Context.CustomerProperties.RemoveRange(Context.CustomerProperties.Where(p => p.PropertyId == prop.Id));
 				Context.CustomProperties.Remove(prop);

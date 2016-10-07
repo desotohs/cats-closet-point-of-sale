@@ -6,6 +6,7 @@ using CatsCloset.Model.Requests;
 namespace CatsCloset.Apis {
 	public class OptionList : AbstractApi<EmptyRequest, IEnumerable<KeyValuePair<string, string>>> {
 		protected override IEnumerable<KeyValuePair<string, string>> Handle(EmptyRequest req) {
+			RequireAuthentication();
 			return Context.Options
 				.ToArray()
 				.Select(

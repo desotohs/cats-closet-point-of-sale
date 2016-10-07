@@ -9,6 +9,13 @@ function angularInit() {
     var app = angular.module("app", []);
     app.controller("controller", function($scope, $http) {
         initGitVersion($scope);
+        pull($http, "/permissions", {}, $scope, "permissions", function() {
+            if ( window.sufficientPermissions ) {
+                if ( !sufficientPermissions($scope.permissions) ) {
+                    location.href = "{{ "/" | prepend: site.baseurl }}";
+                }
+            }
+        });
         if ( window.angularCallback ) {
             angularCallback($scope, $http);
         }
@@ -31,7 +38,11 @@ function transformPictures(obj, server) {
 }
 
 function pull($http, url, data, $scope, field, callback) {
-    $http.post(sessionStorage.server + url, data).then(function(resp) {
+    $http.post(sessionStorage.server + url, data, {
+        "headers": {
+            "X-Auth-Token": sessionStorage.token
+        }
+    }).then(function(resp) {
         transformPictures(resp.data, sessionStorage.server);
         $scope[field] = resp.data;
         if ( callback ) {

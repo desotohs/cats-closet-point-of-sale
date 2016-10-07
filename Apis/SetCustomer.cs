@@ -8,6 +8,7 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class SetCustomer : AbstractApi<SaveCustomerRequest, StatusResponse> {
 		protected override StatusResponse Handle(SaveCustomerRequest req) {
+			AccessRequire(RequireAuthentication().SettingsAccess);
 			Customer customer = Context.Customers
 				.FirstOrDefault(
 					c => c.Name == req.name);

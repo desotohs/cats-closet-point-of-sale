@@ -15,7 +15,7 @@
                 </a>
             </abbr>
         </li>
-        <li>
+        <li ng-show="permissions.office">
             <abbr title="Office" style="border: none;">
                 <a class="btn-floating yellow darken-1" href="{{ "/office/" | prepend: site.baseurl }}">
                     <i class="material-icons">
@@ -24,7 +24,7 @@
                 </a>
             </abbr>
         </li>
-        <li>
+        <li ng-show="permissions.store">
             <abbr title="Store" style="border: none;">
                 <a class="btn-floating green" href="{{ "/store/" | prepend: site.baseurl }}">
                     <i class="material-icons">
@@ -33,7 +33,7 @@
                 </a>
             </abbr>
         </li>
-        <li>
+        <li ng-show="permissions.settings">
             <abbr title="Settings" style="border: none;">
                 <a class="btn-floating blue" href="{{ "/settings/" | prepend: site.baseurl }}">
                     <i class="material-icons">

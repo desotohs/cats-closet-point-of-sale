@@ -12,7 +12,7 @@ script: /js/login.js
                 </h2>
             </div>
             <div class="row">
-                <form class="col s12" action="{{ "/welcome/" | prepend: site.baseurl }}" method="GET" onsubmit="return login.login()">
+                <form class="col s12" action="{{ "/welcome/" | prepend: site.baseurl }}" method="GET" onsubmit="return login.login()" ng-hide="connectWithToken">
                     <div class="row">
                         <div class="input-field col s12">
                             <input placeholder="Server" name="server" id="server" type="text" class="validate white-text" />
@@ -25,11 +25,56 @@ script: /js/login.js
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col s12">
+                        <div class="col s6">
                             <button class="btn waves-effect waves-light" type="submit" name="action">
                                 Login
                                 <i class="material-icons right">
                                     send
+                                </i>
+                            </button>
+                        </div>
+                        <div class="col s6">
+                            <button class="btn waves-effect waves-light" type="button" ng-click="connectWithToken = true">
+                                Connect
+                                <i class="material-icons right">
+                                    airplay
+                                </i>
+                            </button>
+                        </div>
+                    </div>
+                    <small class="white-text">
+                        Logging in signifies your acceptance of the
+                        <a href="//github.com/zachdeibert/cats-closet-point-of-sale/blob/master/LICENSE" target="_blank" class="white-text">
+                            Software License
+                        </a>
+                    </small>
+                </form>
+                <form class="col s12" action="{{ "/screen/" | prepend: site.baseurl }}" method="GET" onsubmit="return login.connect()" ng-show="connectWithToken">
+                <div class="row">
+                        <div class="input-field col s12">
+                            <input placeholder="Server" name="server" id="server2" type="text" class="validate white-text" />
+                        </div>
+                        <div class="input-field col s12">
+                            <input placeholder="Token" name="token" id="token" type="text" class="validate white-text" />
+                        </div>
+                        <div class="input-field col s12 invisible">
+                            <input placeholder="Password" name="password" id="password" type="password" class="validate white-text" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col s6">
+                            <button class="btn waves-effect waves-light" type="button" ng-click="connectWithToken = false">
+                                Login
+                                <i class="material-icons right">
+                                    send
+                                </i>
+                            </button>
+                        </div>
+                        <div class="col s6">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">
+                                Connect
+                                <i class="material-icons right">
+                                    airplay
                                 </i>
                             </button>
                         </div>

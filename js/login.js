@@ -18,6 +18,12 @@ var login = {
         });
         return false;
     },
+    "connect": function() {
+        sessionStorage.server = $("#server2").val();
+        sessionStorage.displayToken = $("#token").val();
+        location.href = "{{ "/screen/" | prepend: site.baseurl }}";
+        return false;
+    },
     "init": function() {
         sessionStorage.token = "";
     }

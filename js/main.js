@@ -104,15 +104,6 @@ function randomToken(length) {
     return token.join("");
 }
 
-function mapScope($scope, from, to) {
-    $scope.$watch(from, function() {
-        var rand = randomToken(8);
-        eval("window.fn" + rand + " = function($scope) { $scope." + to + " = $scope." + from + "; }");
-        window["fn" + rand]($scope);
-        window["fn" + rand] = null;
-    });
-}
-
 setTimeout(function() {
     if ( !sessionStorage.server && !window.login ) {
         location.href = "{{ "/" | prepend: site.baseurl }}";

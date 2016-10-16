@@ -1,11 +1,11 @@
 var store = {
     "initModel": function($scope, $http) {
-        $scope.customer = {};
         pull($http, "/products/enabled", {}, $scope, "products");
-        $scope.total = 0;
         $scope.shared = {
             "local": {
-                "store": true
+                "store": true,
+                "total": 0,
+                "customer": {}
             }
         };
         $("#barcode").val("");
@@ -13,8 +13,8 @@ var store = {
     "onBarcodeScan": function() {
         pull(store.$http, "/customer", {
             "barcode": $("#barcode").val()
-        }, $scope, "customer", function() {
-            if ( $scope.customer ) {
+        }, $scope.shared.local, "customer", function() {
+            if ( $scope.shared.local.customer ) {
                 location.href = "#step-2";
             } else {
                 $("#barcode").val("");
@@ -24,14 +24,14 @@ var store = {
     },
     "verifyAccount": function() {
         location.href = "#step-3";
-        $scope.purchases = [];
+        $scope.shared.local.purchases = [];
         return false;
     },
     "purchase": function() {
         location.href = "#step-4";
         var purchases = [];
-        for ( var i = 0; i < store.$scope.purchases.length; ++i ) {
-            purchases[i] = store.$scope.purchases[i].product.id;
+        for ( var i = 0; i < store.$scope.shared.local.purchases.length; ++i ) {
+            purchases[i] = store.$scope.shared.local.purchases[i].product.id;
         }
         var fakeScope = {};
         pull(store.$http, "/purchase", {
@@ -47,11 +47,6 @@ var store = {
             }
         });
         return false;
-    },
-    "addMappings": function($scope) {
-        mapScope($scope, "total", "shared.local.total");
-        mapScope($scope, "customer", "shared.local.customer");
-        mapScope($scope, "purchases", "shared.local.purchases");
     },
     "initDisplay": function($scope, $http) {
         $scope.displayToken = randomToken(6);
@@ -74,7 +69,6 @@ var store = {
                 }, true);
             }
         };
-        store.addMappings($scope);
     }
 };
 
@@ -82,14 +76,14 @@ function angularCallback($scope, $http) {
     store.initModel($scope, $http);
     store.initDisplay($scope, $http);
     $scope.buy = function($index) {
-        $scope.purchases.push({
+        $scope.shared.local.purchases.push({
             "product": $scope.products[$index]
         });
-        $scope.total += $scope.products[$index].price;
+        $scope.shared.local.total += $scope.products[$index].price;
     };
     $scope.cancelPurchase = function($index) {
-        var purchase = $scope.purchases.splice($index, 1)[0];
-        $scope.total -= purchase.product.price;
+        var purchase = $scope.shared.local.purchases.splice($index, 1)[0];
+        $scope.shared.local.total -= purchase.product.price;
     };
     store.$scope = $scope;
     store.$http = $http;

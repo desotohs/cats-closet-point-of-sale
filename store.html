@@ -43,20 +43,20 @@ script: /js/store.js
         <div class="col s8">
             <div class="collection with-header">
                 <a class="collection-item">
-                    <h4 ng-bind="customer.name"></h4>
+                    <h4 ng-bind="shared.local.customer.name"></h4>
                 </a>
                 <a class="collection-item">
                     Balance:
-                    <span ng-bind="customer.balance | currency"></span>
+                    <span ng-bind="shared.local.customer.balance | currency"></span>
                 </a>
-                <a class="collection-item" ng-repeat="property in customer.properties">
+                <a class="collection-item" ng-repeat="property in shared.local.customer.properties">
                     <span ng-bind="property.name"></span>:
                     <span ng-bind="property.value"></span>
                 </a>
             </div>
         </div>
         <div class="col s4">
-            <img ng-src="{{ "{{" }}customer.picture}}" />
+            <img ng-src="{{ "{{" }}shared.local.customer.picture}}" />
         </div>
     </div>
     <div class="row">
@@ -98,23 +98,23 @@ script: /js/store.js
             <div class="collection with-header">
                 <a class="collection-item">
                     <h4>
-                        <span ng-bind="total | currency"></span>
+                        <span ng-bind="shared.local.total | currency"></span>
                     </h4>
                 </a>
-                <a class="collection-item" ng-repeat="purchase in purchases" ng-click="cancelPurchase($index)">
+                <a class="collection-item" ng-repeat="purchase in shared.local.purchases" ng-click="cancelPurchase($index)">
                     <span ng-bind="purchase.product.name"></span>
                     (<span ng-bind="purchase.product.price | currency"></span>)
                 </a>
                 <div class="collection-item">
                     <form action="#step-4" method="GET" onsubmit="return store.purchase()">
-                        <button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="total <= 0 || total > customer.balance">
+                        <button class="btn waves-effect waves-light" type="submit" name="action" ng-disabled="shared.local.total <= 0 || shared.local.total > shared.local.customer.balance">
                             Purchase
                             <i class="material-icons right">
                                 send
                             </i>
                         </button>
                     </form>
-                    <p class="red-text" ng-show="total < 0 || total > customer.balance">
+                    <p class="red-text" ng-show="shared.local.total < 0 || shared.local.total > shared.local.customer.balance">
                         NOT ENOUGH MONEY IN ACCOUNT
                     </p>
                 </div>

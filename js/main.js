@@ -1,6 +1,50 @@
 ---
 ---
 
+var session = {
+    "send": function(data) {
+        pull(session.$http, "/session/send", {
+            "session": session.token,
+            "data": JSON.stringify(data)
+        }, {}, "a");
+    },
+    "hasResponded": function(callback) {
+        var fakescope = {};
+        pull(session.$http, "/session/responded", {
+            "session": session.token
+        }, fakescope, "response", function() {
+            callback(fakescope.response.success);
+        });
+    },
+    "initRecv": function($http, token) {
+        session.$http = $http;
+        session.recvLoop = true;
+        var recv = function() {
+            pull(session.$http, "/session/recv", {
+                "session": token
+            }, session, "latestPacket", function() {
+                if ( session.latestPacket ) {
+                    if ( session.onRead ) {
+                        session.onRead(session.latestPacket);
+                    }
+                    session.latestPacket = false;
+                }
+                if ( session.recvLoop ) {
+                    recv();
+                }
+            });
+        };
+        recv();
+    },
+    "initSend": function($http, token) {
+        session.$http = $http;
+        session.token = token;
+    },
+    "cancelRecv": function() {
+        session.recvLoop = false;
+    }
+};
+
 function initGitVersion($scope) {
     $scope.version = "$Id$".substr(5).substr(0, "$Id: b3f0aecbaf5905b8095cc455499017fc7a8e27cc $".length - 6);
 }
@@ -48,6 +92,24 @@ function pull($http, url, data, $scope, field, callback) {
         if ( callback ) {
             callback();
         }
+    }, callback);
+}
+
+function randomToken(length) {
+    var dict = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    var token = [];
+    for ( var i = 0; i < length; ++i ) {
+        token.push(dict[Math.floor(dict.length * Math.random())]);
+    }
+    return token.join("");
+}
+
+function mapScope($scope, from, to) {
+    $scope.$watch(from, function() {
+        var rand = randomToken(8);
+        eval("window.fn" + rand + " = function($scope) { $scope." + to + " = $scope." + from + "; }");
+        window["fn" + rand]($scope);
+        window["fn" + rand] = null;
     });
 }
 

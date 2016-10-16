@@ -7,16 +7,18 @@ namespace CatsCloset.Apis {
 	public class SetOption : AbstractApi<KeyValuePair, StatusResponse> {
 		protected override StatusResponse Handle(KeyValuePair req) {
 			AccessRequire(RequireAuthentication().SettingsAccess);
-			Option opt = Context.Options
+			lock ( Context ) {
+				Option opt = Context.Options
 				.FirstOrDefault(
-					o => o.Key == req.name);
-			if ( opt == null ) {
-				opt = new Option();
-				opt.Key = req.name;
-				Context.Options.Add(opt);
+		            o => o.Key == req.name);
+				if ( opt == null ) {
+					opt = new Option();
+					opt.Key = req.name;
+					Context.Options.Add(opt);
+				}
+				opt.Value = req.value;
+				Context.SaveChanges();
 			}
-			opt.Value = req.value;
-			Context.SaveChanges();
 			return new StatusResponse(true);
 		}
 

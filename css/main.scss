@@ -17,6 +17,11 @@ footer .version {
     right: 0;
     bottom: 0;
 }
+footer .token {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+}
 input#barcode {
     display: none;
     position: absolute;

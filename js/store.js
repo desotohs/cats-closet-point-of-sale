@@ -2,20 +2,29 @@ var store = {
     "initModel": function($scope, $http) {
         $scope.customer = {};
         pull($http, "/products/enabled", {}, $scope, "products");
-        $scope.purchases = [];
         $scope.total = 0;
+        $scope.shared = {
+            "local": {
+                "store": true
+            }
+        };
         $("#barcode").val("");
     },
     "onBarcodeScan": function() {
         pull(store.$http, "/customer", {
             "barcode": $("#barcode").val()
         }, $scope, "customer", function() {
-            location.href = "#step-2";
+            if ( $scope.customer ) {
+                location.href = "#step-2";
+            } else {
+                $("#barcode").val("");
+            }
         });
         return false;
     },
     "verifyAccount": function() {
         location.href = "#step-3";
+        $scope.purchases = [];
         return false;
     },
     "purchase": function() {
@@ -38,11 +47,40 @@ var store = {
             }
         });
         return false;
+    },
+    "addMappings": function($scope) {
+        mapScope($scope, "total", "shared.local.total");
+        mapScope($scope, "customer", "shared.local.customer");
+        mapScope($scope, "purchases", "shared.local.purchases");
+    },
+    "initDisplay": function($scope, $http) {
+        $scope.displayToken = randomToken(6);
+        var tokens = {
+            "toDisplay": randomToken(64),
+            "toControl": randomToken(64)
+        };
+        session.initSend($http, $scope.displayToken);
+        session.send(tokens);
+        session.initSend($http, tokens.toDisplay);
+        session.initRecv($http, tokens.toControl);
+        session.onRead = function(data) {
+            if ( data.connected ) {
+                $scope.displayToken = false;
+                session.onRead = function(data) {
+                    $scope.shared.remote = data;
+                };
+                $scope.$watch("shared.local", function(newValue) {
+                    session.send($scope.shared.local);
+                }, true);
+            }
+        };
+        store.addMappings($scope);
     }
 };
 
 function angularCallback($scope, $http) {
     store.initModel($scope, $http);
+    store.initDisplay($scope, $http);
     $scope.buy = function($index) {
         $scope.purchases.push({
             "product": $scope.products[$index]

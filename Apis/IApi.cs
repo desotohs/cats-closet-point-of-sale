@@ -1,5 +1,5 @@
 ﻿using System;
-using FastCGI;
+using System.Net.Http;
 using CatsCloset.Model;
 
 namespace CatsCloset.Apis {
@@ -12,7 +12,7 @@ namespace CatsCloset.Apis {
 			get;
 		}
 
-		bool this[Request req] {
+		bool this[HttpRequestMessage req, HttpResponseMessage res] {
 			get;
 		}
 	}

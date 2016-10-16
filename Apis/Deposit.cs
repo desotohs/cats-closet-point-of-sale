@@ -8,12 +8,14 @@ namespace CatsCloset.Apis {
 	public class Deposit : AbstractApi<DepositRequest, StatusResponse> {
 		protected override StatusResponse Handle(DepositRequest req) {
 			AccessRequire(RequireAuthentication().OfficeAccess);
-			Customer customer = Context.Customers
+			lock ( Context ) {
+				Customer customer = Context.Customers
 				.First(
 					c => c.Barcode ==
-					req.barcode);
-			customer.Balance += req.amount;
-			Context.SaveChanges();
+                   req.barcode);
+				customer.Balance += req.amount;
+				Context.SaveChanges();
+			}
 			return new StatusResponse(true);
 		}
 

@@ -7,12 +7,14 @@ namespace CatsCloset.Apis {
 	public class OptionList : AbstractApi<EmptyRequest, IEnumerable<KeyValuePair<string, string>>> {
 		protected override IEnumerable<KeyValuePair<string, string>> Handle(EmptyRequest req) {
 			RequireAuthentication();
-			return Context.Options
-				.ToArray()
-				.Select(
-					o => new KeyValuePair<string, string>(
-						o.Key,
-						o.Value));
+			lock ( Context ) {
+				return Context.Options
+					.ToArray()
+					.Select(
+						o => new KeyValuePair<string, string>(
+							o.Key,
+							o.Value));
+			}
 		}
 
 		public OptionList() : base("/options") {

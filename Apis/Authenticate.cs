@@ -9,9 +9,12 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class Authenticate : AbstractApi<AuthenticateRequest, TokenResponse> {
 		protected override TokenResponse Handle(AuthenticateRequest req) {
-			User user = Context.Users
-				.FirstOrDefault(
-					u => u.Username == req.username);
+			User user;
+			lock ( Context ) {
+				user = Context.Users
+					.FirstOrDefault(
+						u => u.Username == req.username);
+			}
 			AccessRequire(user != null);
 			byte[] givenHash = HashAlgorithm.Create("sha512")
 				.ComputeHash(
@@ -25,8 +28,10 @@ namespace CatsCloset.Apis {
 			byte[] token = new byte[256];
 			rng.GetBytes(token);
 			string strToken = Convert.ToBase64String(token);
-			user.Token = strToken;
-			Context.SaveChanges();
+			lock ( Context ) {
+				user.Token = strToken;
+				Context.SaveChanges();
+			}
 			return new TokenResponse(strToken);
 		}
 

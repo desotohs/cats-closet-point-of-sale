@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Linq;
-using FastCGI;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 using CatsCloset.Model;
 
 namespace CatsCloset.Apis {
 	public abstract class AbstractApi<TReq, TRes> : IApi {
 		private readonly object Lock;
-		private Request CurrentRequest;
+		private HttpRequestMessage CurrentRequest;
 		protected readonly string Url;
 
 		public Context Context {
@@ -21,10 +24,10 @@ namespace CatsCloset.Apis {
 			}
 		}
 
-		public bool this[Request req] {
+		public bool this[HttpRequestMessage req, HttpResponseMessage res] {
 			get {
-				if ( this[req.GetParameterUTF8("REQUEST_URI")] ) {
-					Handle(req);
+				if ( this[req.RequestUri.AbsolutePath] ) {
+					Handle(req, res);
 					return true;
 				} else {
 					return false;
@@ -39,23 +42,34 @@ namespace CatsCloset.Apis {
 		}
 
 		protected User RequireAuthentication() {
-			string token = CurrentRequest.GetParameterASCII("HTTP_X_AUTH_TOKEN");
+			string token = CurrentRequest.Headers.GetValues("X-Auth-Token").FirstOrDefault();
 			AccessRequire(token != null);
-			User user = Context.Users
-				.FirstOrDefault(
-					u => u.Token == token);
+			User user;
+			lock ( Context ) {
+				user = Context.Users
+					.FirstOrDefault(
+						u => u.Token == token);
+			}
 			AccessRequire(user != null);
 			return user;
 		}
 
 		protected abstract TRes Handle(TReq req);
 
-		protected virtual void Handle(Request req) {
-			string res;
-			if ( req.GetParameterUTF8("REQUEST_METHOD") == "OPTIONS" ) {
-				res = "";
+		protected virtual void AddHeaders(HttpResponseMessage res) {
+			res.Headers.Add("Access-Control-Allow-Origin", "*");
+			res.Headers.Add("Access-Control-Allow-Headers", "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Pragma,X-Auth-Token");
+		}
+
+		protected virtual void Handle(HttpRequestMessage req, HttpResponseMessage res) {
+			AddHeaders(res);
+			string resStr;
+			if ( req.Method == HttpMethod.Options ) {
+				resStr = "";
 			} else {
-				TReq reqObj = JsonConvert.DeserializeObject<TReq>(req.GetBody(null));
+				Task<string> contentTask = req.Content.ReadAsStringAsync();
+				contentTask.Wait();
+				TReq reqObj = JsonConvert.DeserializeObject<TReq>(contentTask.Result);
 				TRes resObj;
 				try {
 					lock ( Lock ) {
@@ -63,14 +77,14 @@ namespace CatsCloset.Apis {
 						resObj = Handle(reqObj);
 					}
 				} catch ( UnauthorizedAccessException ) {
-					req.WriteResponseASCII("HTTP/1.1 403 Unauthorized\nContent-Type: text/json\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Pragma,X-Auth-Token\n\n");
-					req.WriteResponseUtf8("{\"unauthorized\":true}");
+					res.StatusCode = HttpStatusCode.Forbidden;
+					res.Content = new StringContent("{\"unauthorized\":true}");
 					return;
 				}
-				res = JsonConvert.SerializeObject(resObj);
+				resStr = JsonConvert.SerializeObject(resObj);
 			}
-			req.WriteResponseASCII("HTTP/1.1 200 OK\nContent-Type: text/json\nAccess-Control-Allow-Origin: *\nAccess-Control-Allow-Headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Pragma,X-Auth-Token\n\n");
-			req.WriteResponseUtf8(res);
+			res.Content = new StringContent(resStr);
+			res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 		}
 
 		protected AbstractApi(string url) {

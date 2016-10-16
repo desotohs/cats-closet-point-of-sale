@@ -7,7 +7,9 @@ namespace CatsCloset.Apis {
 	public class CustomerList : AbstractApi<EmptyRequest, IEnumerable<string>> {
 		protected override IEnumerable<string> Handle(EmptyRequest req) {
 			RequireAuthentication();
-			return Context.Customers.Select(c => c.Name);
+			lock ( Context ) {
+				return Context.Customers.Select(c => c.Name);
+			}
 		}
 
 		public CustomerList() : base("/customers") {

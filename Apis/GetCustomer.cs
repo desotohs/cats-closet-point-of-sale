@@ -8,10 +8,13 @@ namespace CatsCloset.Apis {
 	public class GetCustomer : AbstractApi<CustomerRequest, CustomerResponse> {
 		protected override CustomerResponse Handle(CustomerRequest req) {
 			RequireAuthentication();
-			Customer customer = Context.Customers
+			Customer customer;
+			lock ( Context ) {
+				customer = Context.Customers
 				.FirstOrDefault(
-				c => c.Barcode == req.barcode ||
+					c => c.Barcode == req.barcode ||
 					c.Name == req.name);
+			}
 			return customer == null ?
 				null :
 				new CustomerResponse(customer);

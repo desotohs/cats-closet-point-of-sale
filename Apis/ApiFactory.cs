@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Reflection;
-using FastCGI;
 using CatsCloset.Model;
 
 namespace CatsCloset.Apis {
@@ -31,16 +32,13 @@ namespace CatsCloset.Apis {
 			}
 		}
 
-		private static void WriteError(Request req) {
-			req.WriteResponseASCII("HTTP/1.1 404 Not Found\nContent-Type: text/plain\n\n");
-			req.WriteResponseUtf8("The specified URL could not be found.");
-		}
-
-		public static void HandleRequest(Request req, Context ctx) {
+		public static HttpResponseMessage HandleRequest(HttpRequestMessage msg, Context ctx) {
 			EnsureApiListPopulated(ctx);
-			if ( !Apis.Any(a => a[req]) ) {
-				WriteError(req);
+			HttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);
+			if ( !Apis.Any(a => a[msg, res]) ) {
+				return new HttpResponseMessage(HttpStatusCode.NotFound);
 			}
+			return res;
 		}
 	}
 }

@@ -8,10 +8,12 @@ namespace CatsCloset.Apis {
 	public class ProductList : AbstractApi<EmptyRequest, IEnumerable<ProductResponse>> {
 		protected override IEnumerable<ProductResponse> Handle(EmptyRequest req) {
 			RequireAuthentication();
-			return Context.Products
-				.ToArray()
-				.Select(
-					p => new ProductResponse(p));
+			lock ( Context ) {
+				return Context.Products
+					.ToArray()
+					.Select(
+						p => new ProductResponse(p));
+			}
 		}
 
 		public ProductList() : base("/products") {

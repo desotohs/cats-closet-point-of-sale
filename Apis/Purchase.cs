@@ -8,23 +8,25 @@ namespace CatsCloset.Apis {
 	public class Purchase : AbstractApi<PurchaseRequest, StatusResponse> {
 		protected override StatusResponse Handle(PurchaseRequest req) {
 			AccessRequire(RequireAuthentication().StoreAccess);
-			double cost = req.purchases
+			lock ( Context ) {
+				double cost = req.purchases
 				.Select(
-					i => Context.Products
+			             i => Context.Products
 					.First(
-						p => p.Id == i)
+			             p => p.Id == i)
 					.Price)
 				.Sum();
-			Customer customer = Context.Customers
+				Customer customer = Context.Customers
 				.First(
-					c => c.Barcode ==
-					req.barcode);
-			if ( customer.Balance >= cost ) {
-				customer.Balance -= cost;
-				Context.SaveChanges();
-				return new StatusResponse(true);
-			} else {
-				return new StatusResponse(false);
+                   c => c.Barcode ==
+                   req.barcode);
+				if ( customer.Balance >= cost ) {
+					customer.Balance -= cost;
+					Context.SaveChanges();
+					return new StatusResponse(true);
+				} else {
+					return new StatusResponse(false);
+				}
 			}
 		}
 

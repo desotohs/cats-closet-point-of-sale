@@ -8,9 +8,12 @@ namespace CatsCloset.Apis {
 	public class GetOption : AbstractApi<OptionRequest, KeyValuePair> {
 		protected override KeyValuePair Handle(OptionRequest req) {
 			RequireAuthentication();
-			Option opt = Context.Options
-				.First(
-					o => o.Key == req.name);
+			Option opt;
+			lock ( Context ) {
+				opt = Context.Options
+					.First(
+			            o => o.Key == req.name);
+			}
 			return new KeyValuePair(opt.Key, opt.Value);
 		}
 

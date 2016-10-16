@@ -17,7 +17,7 @@ script: /js/screen.js
                 welcome to the Cat's Closet!
             </h4>
             <p class="white-text" ng-show="shared.remote.purchases">
-                The current balance in your account is $<span ng-bind="shared.remote.customer.balance"></span>.
+                The current balance in your account is <span ng-bind="shared.remote.customer.balance | currency"></span>.
                 To the right, you will see the items you are purchasing.
             </p>
         </div>
@@ -25,7 +25,7 @@ script: /js/screen.js
             <div class="collection with-header">
                 <a class="collection-item" ng-repeat="purchase in shared.remote.purchases">
                     <span ng-bind="purchase.product.name"></span>
-                    ($<span ng-bind="purchase.product.price"></span>)
+                    (<span ng-bind="purchase.product.price | currency"></span>)
                 </a>
                 <div class="collection-item" ng-show="shared.remote.total < 0 || shared.remote.total > shared.remote.customer.balance">
                     <p class="red-text">
@@ -34,7 +34,7 @@ script: /js/screen.js
                 </div>
                 <a class="collection-item" ng-hide="shared.remote.total < 0 || shared.remote.total > shared.remote.customer.balance">
                     <h4>
-                        $<span ng-bind="shared.remote.total"></span>
+                        <span ng-bind="shared.remote.total | currency"></span>
                     </h4>
                 </a>
             </div>
@@ -46,19 +46,19 @@ script: /js/screen.js
                 <h4>
                     <div class="row">
                         <div class="col s3 center">
-                            $<span ng-bind="shared.remote.customer.balance"></span>
+                            <span ng-bind="shared.remote.customer.balance | currency"></span>
                         </div>
                         <div class="col s1 center">
                             -
                         </div>
                         <div class="col s4 center">
-                            $<span ng-bind="shared.remote.total"></span>
+                            <span ng-bind="shared.remote.total | currency"></span>
                         </div>
                         <div class="col s1 center">
                             =
                         </div>
                         <div class="col s3 center">
-                            $<span ng-bind="shared.remote.customer.balance - shared.remote.total"></span>
+                            <span ng-bind="shared.remote.customer.balance - shared.remote.total | currency"></span>
                         </div>
                     </div>
                 </h4>

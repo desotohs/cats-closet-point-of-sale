@@ -47,7 +47,7 @@ script: /js/store.js
                 </a>
                 <a class="collection-item">
                     Balance:
-                    $<span ng-bind="customer.balance"></span>
+                    <span ng-bind="customer.balance | currency"></span>
                 </a>
                 <a class="collection-item" ng-repeat="property in customer.properties">
                     <span ng-bind="property.name"></span>:
@@ -88,7 +88,7 @@ script: /js/store.js
                         <span class="card-title" ng-bind="product.name"></span>
                         <p ng-bind="product.desc"></p>
                         <i>
-                            $<span ng-bind="product.price"></span>
+                            <span ng-bind="product.price | currency"></span>
                         </i>
                     </div>
                 </div>
@@ -98,12 +98,12 @@ script: /js/store.js
             <div class="collection with-header">
                 <a class="collection-item">
                     <h4>
-                        $<span ng-bind="total"></span>
+                        <span ng-bind="total | currency"></span>
                     </h4>
                 </a>
                 <a class="collection-item" ng-repeat="purchase in purchases" ng-click="cancelPurchase($index)">
                     <span ng-bind="purchase.product.name"></span>
-                    ($<span ng-bind="purchase.product.price"></span>)
+                    (<span ng-bind="purchase.product.price | currency"></span>)
                 </a>
                 <div class="collection-item">
                     <form action="#step-4" method="GET" onsubmit="return store.purchase()">

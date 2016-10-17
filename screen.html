@@ -6,7 +6,7 @@ script: /js/screen.js
     <div class="row" ng-hide="shared.remote.customer.name">
         <div class="col s12">
             <h1 class="white-text center">
-                Welcome to the Cat's Closet!
+                Welcome to the <span ng-bind="shared.remote.storeName"></span>!
             </h1>
         </div>
     </div>
@@ -14,7 +14,7 @@ script: /js/screen.js
         <div class="col s8" ng-show="shared.remote.customer.name">
             <h4 class="white-text">
                 <span ng-bind="shared.remote.customer.name"></span>,
-                welcome to the Cat's Closet!
+                welcome to the <span ng-bind="shared.remote.storeName"></span>!
             </h4>
             <p class="white-text" ng-show="shared.remote.purchases">
                 The current balance in your account is <span ng-bind="shared.remote.customer.balance | currency"></span>.

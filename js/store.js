@@ -8,6 +8,12 @@ var store = {
                 "customer": {}
             }
         };
+        var fakescope = {};
+        pull($http, "/option", {
+            "name": "StoreName"
+        }, fakescope, "result", function() {
+            $scope.shared.local.storeName = fakescope.result.value;
+        });
         $("#barcode").val("");
     },
     "onBarcodeScan": function() {

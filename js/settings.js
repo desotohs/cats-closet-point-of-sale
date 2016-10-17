@@ -17,6 +17,11 @@ var settings = {
         }, fakescope, "result", function() {
             $scope.taxPercent = parseFloat(fakescope.result.value);
         });
+        pull($http, "/option", {
+            "name": "StoreName"
+        }, fakescope, "result2", function() {
+            $scope.storeName = fakescope.result2.value;
+        });
         $scope.customer = {};
         $scope.newProduct = {
             "name": "",
@@ -76,6 +81,20 @@ var settings = {
                 Materialize.toast("Taxes saved!", 4000);
             } else {
                 alert("Taxes save failed!");
+            }
+        });
+        return false;
+    },
+    "saveStore": function() {
+        var fakescope = {};
+        pull($http, "/option/save", {
+            "name": "StoreName",
+            "value": settings.$scope.storeName
+        }, fakescope, "result", function() {
+            if ( fakescope.result.success ) {
+                Materialize.toast("Store saved!", 4000);
+            } else {
+                alert("Store save failed!");
             }
         });
         return false;

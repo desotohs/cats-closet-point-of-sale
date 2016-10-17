@@ -31,6 +31,35 @@ layout: setting
         </div>
     </form>
     <hr />
+    <form action="#" method="GET" onsubmit="return settings.saveStore()">
+        <div class="row">
+            <div class="col s1"></div>
+            <div class="col s10 center">
+                <h3 class="white-text">
+                    Store Properties
+                </h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s1"></div>
+            <div class="col s10 input-field white-text">
+                Store Name:
+                <input type="text" ng-model="storeName" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s1"></div>
+            <div class="col s10">
+                <button class="btn waves-effect waves-light" type="submit" name="action">
+                    Save
+                    <i class="material-icons right">
+                        send
+                    </i>
+                </button>
+            </div>
+        </div>
+    </form>
+    <hr />
     <form action="#" method="GET" onsubmit="return settings.saveProperties()">
         <div class="row">
             <div class="col s1"></div>

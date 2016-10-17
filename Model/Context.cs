@@ -42,6 +42,16 @@ namespace CatsCloset.Model {
 			get;
 			set;
 		}
+
+		public virtual DbSet<History> History {
+			get;
+			set;
+		}
+
+		public virtual DbSet<HistoryPurchase> HistoryPurchases {
+			get;
+			set;
+		}
 	}
 }
 

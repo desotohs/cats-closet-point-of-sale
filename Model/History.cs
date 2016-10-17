@@ -4,50 +4,46 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CatsCloset.Model {
-	public class Customer {
+	public class History {
 		[Key]
 		public int Id {
 			get;
 			set;
 		}
 
-		public string Name {
+		public DateTime Time {
 			get;
 			set;
 		}
 
-		public double Balance {
+		[ForeignKey("User")]
+		public int UserId {
 			get;
 			set;
 		}
 
-		[ForeignKey("Image")]
-		public int ImageId {
+		public virtual User User {
 			get;
 			set;
 		}
 
-		public virtual Image Image {
+		[ForeignKey("Customer")]
+		public int CustomerId {
 			get;
 			set;
 		}
 
-		public string Barcode {
+		public virtual Customer Customer {
 			get;
 			set;
 		}
 
-		public string Pin {
+		public double BalanceChange {
 			get;
 			set;
 		}
 
-		public virtual List<CustomerProperty> Properties {
-			get;
-			set;
-		}
-
-		public virtual List<History> PurchaseHistory {
+		public virtual List<HistoryPurchase> Purchases {
 			get;
 			set;
 		}

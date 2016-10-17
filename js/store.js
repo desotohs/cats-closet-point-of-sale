@@ -50,8 +50,10 @@ var store = {
     "purchase": function() {
         location.href = "#step-4";
         if ( store.$scope.shared.local.customer.pinLength > 0 ) {
-            store.$scope.shared.local.resetPass = Math.random();
-            store.$scope.shared.local.promptPass = true;
+            store.$scope.$apply(function() {
+                store.$scope.shared.local.resetPass = Math.random();
+                store.$scope.shared.local.promptPass = true;
+            });
             var unbind = $scope.$watch("shared.remote.pin", function(newValue) {
                 if ( newValue.length == $scope.shared.local.customer.pinLength ) {
                     unbind();

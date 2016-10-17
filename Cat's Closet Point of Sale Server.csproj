@@ -138,6 +138,8 @@
     <Compile Include="Model\Requests\AuthenticateRequest.cs" />
     <Compile Include="Model\Responses\TokenResponse.cs" />
     <Compile Include="Main\SessionMonitor.cs" />
+    <Compile Include="Model\History.cs" />
+    <Compile Include="Model\HistoryPurchase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

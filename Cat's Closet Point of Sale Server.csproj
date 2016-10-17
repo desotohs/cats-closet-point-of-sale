@@ -84,6 +84,7 @@
       <HintPath>packages\Microsoft.AspNet.Cors.5.2.3\lib\net45\System.Web.Cors.dll</HintPath>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -140,6 +141,9 @@
     <Compile Include="Main\SessionMonitor.cs" />
     <Compile Include="Model\History.cs" />
     <Compile Include="Model\HistoryPurchase.cs" />
+    <Compile Include="Emails\EmailSystem.cs" />
+    <Compile Include="Emails\EmailConnection.cs" />
+    <Compile Include="Emails\EmailFactory.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -157,9 +161,13 @@
     <Folder Include="Apis\" />
     <Folder Include="Model\Requests\" />
     <Folder Include="Model\Responses\" />
+    <Folder Include="Emails\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="PurchaseEmail.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using CatsCloset.Emails;
 using CatsCloset.Model;
 using CatsCloset.Model.Requests;
 using CatsCloset.Model.Responses;
@@ -45,6 +46,7 @@ namespace CatsCloset.Apis {
 							Product = g.First()
 						}));
 					Context.SaveChanges();
+					EmailSystem.SendPurchaseEmail(customer, history);
 					return new StatusResponse(true);
 				} else {
 					return new StatusResponse(false);

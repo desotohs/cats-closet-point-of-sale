@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css" />
+		<style>
+			span.replacement, span.repeat {
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col s12">
+					<h3>
+						<span class="replacement">Options.StoreName</span> Receipt
+					</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<p>
+						Thank you for purchasing items at the <span class="replacement">Options.StoreName</span>.
+						Below is your receipt from this time along with a brief history of previous purchases at the <span class="replacement">Options.StoreName</span>.
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<p>
+						Your current balance is: <span class="replacement">Customer.Balance</span>
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<div class="collection with-header">
+						<span class="repeat" data-repeat="Purchases">
+							<a class="collection-item">
+								<span class="replacement">Purchase.Name</span>
+								(<span class="replacement">Purchase.Quantity</span> x <span class="replacement">Purchase.UnitPrice</span>)
+							</a>
+						</span>
+						<a class="collection-item">
+							<h4>
+								Total:
+								<span class="replacement">Purchases.Total</span>
+							</h4>
+						</a>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<div class="collection with-header">
+						<a class="collection-item">
+							<h4>
+								Recent Purchases:
+							</h4>
+						</a>
+						<span class="repeat" data-repeat="RecentPurchases">
+							<a class="collection-item">
+								<span class="replacement">RecentPurchase.Date</span>:
+								<span class="replacement">RecentPurchase.Amount</span>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col s12">
+					If you have any questions, please contact
+					<span class="replacement">Options.AdminEmail</span>.
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

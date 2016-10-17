@@ -11,6 +11,7 @@ using System.Web.Http;
 using Microsoft.Owin.Hosting;
 using Owin;
 using CatsCloset.Apis;
+using CatsCloset.Emails;
 using CatsCloset.Model;
 
 namespace CatsCloset.Main {
@@ -76,6 +77,7 @@ namespace CatsCloset.Main {
 			EnsureUserExists();
 			SessionMonitor monitor = new SessionMonitor(ctx);
 			monitor.PurgeSessions();
+			EmailSystem.Init(ctx);
 			using ( WebApp.Start<Program>("http://*:8080") ) {
 				monitor.Start();
 				Console.WriteLine("Application started.");

@@ -27,8 +27,7 @@ var store = {
         $scope.shared.local.purchases = [];
         return false;
     },
-    "purchase": function() {
-        location.href = "#step-4";
+    "sendPurchase": function() {
         var purchases = [];
         for ( var i = 0; i < store.$scope.shared.local.purchases.length; ++i ) {
             purchases[i] = store.$scope.shared.local.purchases[i].product.id;
@@ -36,16 +35,33 @@ var store = {
         var fakeScope = {};
         pull(store.$http, "/purchase", {
             "barcode": $("#barcode").val(),
+            "pin": store.$scope.shared.remote.pin,
             "purchases": purchases
         }, fakeScope, "status", function() {
             if ( fakeScope.status.success ) {
                 location.href = "#step-1";
                 store.initModel(store.$scope, store.$http);
             } else {
-                alert("Unable to purchase items");
-                location.href = "#step-3";
+                alert("Invalid pin");
+                store.purchase();
             }
         });
+    },
+    "purchase": function() {
+        location.href = "#step-4";
+        if ( store.$scope.shared.local.customer.pinLength > 0 ) {
+            store.$scope.shared.local.resetPass = Math.random();
+            store.$scope.shared.local.promptPass = true;
+            var unbind = $scope.$watch("shared.remote.pin", function(newValue) {
+                if ( newValue.length == $scope.shared.local.customer.pinLength ) {
+                    unbind();
+                    store.sendPurchase();
+                    store.$scope.shared.local.resetPass = Math.random();
+                }
+            });
+        } else {
+            store.sendPurchase();
+        }
         return false;
     },
     "initDisplay": function($scope, $http) {

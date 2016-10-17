@@ -19,7 +19,8 @@ namespace CatsCloset.Apis {
 				Customer customer = Context.Customers
 				.First(
                    c => c.Barcode ==
-                   req.barcode);
+						req.barcode &&
+						c.Pin == req.pin);
 				if ( customer.Balance >= cost ) {
 					customer.Balance -= cost;
 					Context.SaveChanges();

@@ -123,7 +123,14 @@ script: /js/store.js
     </div>
 </div>
 <div class="container full-height" id="step-4">
-    <div class="row">
+    <div class="row" ng-hide="shared.remote.pin.length == shared.local.customer.pinLength">
+        <div class="col s12 center">
+            <h4 class="white-text">
+                Waiting for customer to input pin.
+            </h4>
+        </div>
+    </div>
+    <div class="row" ng-show="shared.remote.pin.length == shared.local.customer.pinLength">
         <div class="col s12 center">
             <h4 class="white-text">
                 Purchasing...

@@ -37,6 +37,11 @@ namespace CatsCloset.Model {
 			set;
 		}
 
+		public string Pin {
+			get;
+			set;
+		}
+
 		public virtual List<CustomerProperty> Properties {
 			get;
 			set;

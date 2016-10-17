@@ -65,4 +65,14 @@ script: /js/screen.js
             </a>
         </div>
     </div>
+    <div class="row" ng-show="shared.remote.promptPass">
+        <div class="col s2">
+            <h5 class="white-text">
+                Pin:
+            </h5>
+        </div>
+        <div class="col s10 input-field">
+            <input type="password" ng-model="shared.local.pin" />
+        </div>
+    </div>
 </div>

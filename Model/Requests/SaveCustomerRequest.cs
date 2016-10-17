@@ -7,6 +7,7 @@ namespace CatsCloset.Model.Requests {
 		public string name;
 		public string code;
 		public double balance;
+		public string pin;
 		public List<KeyValuePair> properties;
 	}
 }

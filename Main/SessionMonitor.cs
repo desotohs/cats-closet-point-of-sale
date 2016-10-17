@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Timers;
 using CatsCloset.Model;
@@ -11,11 +12,12 @@ namespace CatsCloset.Main {
 
 		public void PurgeSessions() {
 			lock ( Context ) {
+				DateTime hourAgo = DateTime.Now - new TimeSpan(1, 0, 0);
 				Context.SessionMessages
 					.RemoveRange(
 						Context.SessionMessages
 						.Where(
-							m => m.LastUpdate + new TimeSpan(1, 0, 0) < DateTime.Now));
+							m => m.LastUpdate < hourAgo));
 			}
 		}
 

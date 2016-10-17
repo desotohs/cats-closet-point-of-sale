@@ -20,9 +20,17 @@ var screen = {
             }
         };
         session.initRecv($http, sessionStorage.displayToken);
+    },
+    "initWatches": function($scope) {
+        $scope.$watch("shared.remote.resetPass", function(newValue, oldValue) {
+            if ( newValue != oldValue ) {
+                $scope.shared.local.pin = "";
+            }
+        });
     }
 };
 
 function angularCallback($scope, $http) {
     screen.init($scope, $http);
+    screen.initWatches($scope);
 }

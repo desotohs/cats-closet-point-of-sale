@@ -7,7 +7,7 @@ using CatsCloset.Model.Responses;
 namespace CatsCloset.Apis {
 	public class GetCustomer : AbstractApi<CustomerRequest, CustomerResponse> {
 		protected override CustomerResponse Handle(CustomerRequest req) {
-			RequireAuthentication();
+			User user = RequireAuthentication();
 			Customer customer;
 			lock ( Context ) {
 				customer = Context.Customers
@@ -17,7 +17,7 @@ namespace CatsCloset.Apis {
 			}
 			return customer == null ?
 				null :
-				new CustomerResponse(customer);
+				new CustomerResponse(customer, user.SettingsAccess);
 		}
 
 		public GetCustomer() : base("/customer") {

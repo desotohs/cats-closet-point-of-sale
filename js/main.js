@@ -104,7 +104,31 @@ function randomToken(length) {
     return token.join("");
 }
 
+function bugReport() {
+    $("#dialog-bugreport").dialog("open");
+}
+
+function initBugReport() {
+    $("#dialog-bugreport").dialog({
+        "resizable": false,
+        "height": "auto",
+        "width": 400,
+        "modal": true,
+        "buttons": {
+            "No": function() {
+                $(this).dialog("close");
+            },
+            "Yes": function() {
+                $(this).dialog("close");
+                window.open("https://github.com/zachdeibert/cats-closet-point-of-sale/issues/new", "_blank");
+            }
+        },
+        "autoOpen": false
+    });
+}
+
 setTimeout(function() {
+    initBugReport();
     if ( !sessionStorage.server && !window.login ) {
         location.href = "{{ "/" | prepend: site.baseurl }}";
     }

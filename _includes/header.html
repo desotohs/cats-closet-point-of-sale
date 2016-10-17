@@ -1,4 +1,10 @@
 {% if page.hideFAB %}{% else %}
+<div id="dialog-bugreport" title="Submit Bug Report">
+    <p>
+        <span class="ui-icon ui-icon-alert" style="float: left; margin: 12px 12px 20px 0;"></span>
+        Have you tried restarting the application yet?
+    </p>
+</div>
 <div class="fixed-action-btn vertical">
     <a class="btn-floating btn-large red">
         <i class="large material-icons">
@@ -44,7 +50,7 @@
         </li>
         <li>
             <abbr title="Bug Report" style="border: none;">
-                <a class="btn-floating red" href="//github.com/zachdeibert/cats-closet-point-of-sale/issues/new" target="_blank">
+                <a class="btn-floating red" onclick="bugReport()" target="_blank">
                     <i class="material-icons">
                         bug_report
                     </i>

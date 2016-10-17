@@ -74,7 +74,10 @@ namespace CatsCloset.Main {
 			ctx.Database.CreateIfNotExists();
 			ctx.Database.Initialize(false);
 			EnsureUserExists();
+			SessionMonitor monitor = new SessionMonitor(ctx);
+			monitor.PurgeSessions();
 			using ( WebApp.Start<Program>("http://*:8080") ) {
+				monitor.Start();
 				Console.WriteLine("Application started.");
 				if ( Environment.UserInteractive ) {
 					Console.WriteLine("Press any key to stop the server");

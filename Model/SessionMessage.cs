@@ -13,6 +13,11 @@ namespace CatsCloset.Model {
 			get;
 			set;
 		}
+
+		public DateTime LastUpdate {
+			get;
+			set;
+		}
 	}
 }
 

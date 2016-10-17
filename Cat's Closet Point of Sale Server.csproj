@@ -137,6 +137,7 @@
     <Compile Include="Apis\Authenticate.cs" />
     <Compile Include="Model\Requests\AuthenticateRequest.cs" />
     <Compile Include="Model\Responses\TokenResponse.cs" />
+    <Compile Include="Main\SessionMonitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -14,9 +14,11 @@ namespace CatsCloset.Apis {
 				if ( msg == null ) {
 					msg = new SessionMessage();
 					msg.Id = req.session;
+					msg.LastUpdate = DateTime.Now;
 					Context.SessionMessages.Add(msg);
 				}
 				msg.Content = req.data;
+				msg.LastUpdate = DateTime.Now;
 				Context.SaveChanges();
 			}
 			return new StatusResponse(true);

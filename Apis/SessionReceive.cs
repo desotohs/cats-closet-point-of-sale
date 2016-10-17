@@ -30,6 +30,7 @@ namespace CatsCloset.Apis {
 						msg = new SessionMessage();
 						msg.Id = reqObj.session;
 						msg.Content = null;
+						msg.LastUpdate = DateTime.Now;
 						Context.SessionMessages.Add(msg);
 						Context.SaveChanges();
 					}
@@ -41,6 +42,7 @@ namespace CatsCloset.Apis {
 				res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/json");
 				lock ( Context ) {
 					msg.Content = null;
+					msg.LastUpdate = DateTime.Now;
 					Context.SaveChanges();
 				}
 			}

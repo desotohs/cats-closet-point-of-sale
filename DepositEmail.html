@@ -20,7 +20,7 @@
 			<div class="row">
 				<div class="col s12">
 					<p>
-						Thank you for purchasing items at the <span class="replacement">Options.StoreName</span>.
+						Thank you for depositing money at the <span class="replacement">Options.StoreName</span>.
 						Below is your receipt from this time along with a brief history of previous purchases at the <span class="replacement">Options.StoreName</span>.
 					</p>
 				</div>
@@ -28,26 +28,9 @@
 			<div class="row">
 				<div class="col s12">
 					<p>
-						Your current balance is: <span class="replacement">Customer.Balance</span>
+						Your new balance is: <span class="replacement">Customer.Balance</span>
+						(Deposited <span class="replacement">Purchases.Total</span>)
 					</p>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col s12">
-					<div class="collection with-header">
-						<span class="repeat" data-repeat="Purchases">
-							<a class="collection-item">
-								<span class="replacement">Purchase.Name</span>
-								(<span class="replacement">Purchase.Quantity</span> x <span class="replacement">Purchase.UnitPrice</span>)
-							</a>
-						</span>
-						<a class="collection-item">
-							<h4>
-								Total:
-								<span class="replacement">Purchases.Total</span>
-							</h4>
-						</a>
-					</div>
 				</div>
 			</div>
 			<div class="row">

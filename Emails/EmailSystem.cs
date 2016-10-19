@@ -23,9 +23,9 @@ namespace CatsCloset.Emails {
 			}
 		}
 
-		public static void SendPurchaseEmail(Customer customer, History purchase) {
-			EmailFactory email = new EmailFactory("PurchaseEmail.html");
-			email.Replace(Context, customer, purchase);
+		public static void SendEmail(string name, Customer customer, History history) {
+			EmailFactory email = new EmailFactory(name);
+			email.Replace(Context, customer, history);
 			string addr = customer.Properties
 				.First(
 					p => p.Property.Name ==
@@ -35,6 +35,14 @@ namespace CatsCloset.Emails {
 					.Value)
 				.Value;
 			Send(email.ToString(), addr);
+		}
+
+		public static void SendPurchaseEmail(this Customer customer, History purchase) {
+			SendEmail("PurchaseEmail.html", customer, purchase);
+		}
+
+		public static void SendDepositEmail(this Customer customer, History deposit) {
+			SendEmail("DepositEmail.html", customer, deposit);
 		}
 	}
 }

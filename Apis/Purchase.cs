@@ -46,7 +46,7 @@ namespace CatsCloset.Apis {
 							Product = g.First()
 						}));
 					Context.SaveChanges();
-					EmailSystem.SendPurchaseEmail(customer, history);
+					customer.SendPurchaseEmail(history);
 					return new StatusResponse(true);
 				} else {
 					return new StatusResponse(false);

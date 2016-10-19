@@ -30,7 +30,7 @@ namespace CatsCloset.Emails {
 			case "Purchase.UnitPrice":
 				return FormatCurrency(purchase.Product.Price);
 			case "Purchases.Total":
-				return FormatCurrency(-currentPurchase.BalanceChange);
+				return FormatCurrency(Math.Abs(currentPurchase.BalanceChange));
 			case "RecentPurchase.Date":
 				return recentPurchase.Time;
 			case "RecentPurchase.Amount":
@@ -39,6 +39,11 @@ namespace CatsCloset.Emails {
 				return ctx.Options
 					.First(
 						o => o.Key == "AdminEmail")
+					.Value;
+			case "Options.MailingAddress":
+				return ctx.Options
+					.First(
+						o => o.Key == "MailingAddress")
 					.Value;
 			default:
 				throw new ArgumentException("Unknown replacement token");
@@ -52,15 +57,19 @@ namespace CatsCloset.Emails {
 					n => n is XmlElement)
 				.Cast<XmlElement>()
 				.Where(
-					n => n.Name == "span" &&
+					n => (n.Name == "span" ||
+					n.Name == "a") &&
 					n.Attributes
 					.Cast<XmlAttribute>()
 					.Any(
 						a => a.Name == "class" &&
 						a.Value == "replacement")) ) {
-				// Each of these is a replacement node
+				// Each of these is a replacement span
 				child.RemoveAttribute("class");
 				child.InnerText = GetReplacement(child.InnerText, ctx, customer, currentPurchase, purchase, recentPurchase).ToString();
+				if ( child.Name == "a" ) {
+					child.SetAttribute("href", string.Concat(child.InnerText.Contains("@") ? "mailto:" : "", child.InnerText));
+				}
 			}
 			foreach ( XmlElement child in element.ChildNodes
 				.Cast<XmlNode>()
@@ -82,7 +91,7 @@ namespace CatsCloset.Emails {
 						break;
 					case "RecentPurchases":
 						purchases = Enumerable.Repeat(purchase, 5);
-						recentPurchases = customer.PurchaseHistory.OrderByDescending(h => h.Time).Take(5);
+						recentPurchases = customer.PurchaseHistory.Where(h => h.BalanceChange < 0).OrderByDescending(h => h.Time).Take(5);
 						break;
 					default:
 						throw new ArgumentException("Unknown repeat token");

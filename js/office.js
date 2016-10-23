@@ -44,7 +44,7 @@ function angularCallback($scope, $http) {
 }
 
 function sufficientPermissions(permissions) {
-    return permissions.office;
+    return permissions && permissions.office;
 }
 
 window.onkeypress = function(e) {

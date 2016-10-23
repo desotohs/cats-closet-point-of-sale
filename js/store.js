@@ -134,7 +134,7 @@ function angularCallback($scope, $http) {
 }
 
 function sufficientPermissions(permissions) {
-    return permissions.store;
+    return permissions && permissions.store;
 }
 
 window.onkeypress = function(e) {

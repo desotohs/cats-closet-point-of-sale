@@ -22,6 +22,7 @@ var settings = {
         }, fakescope, "result2", function() {
             $scope.storeName = fakescope.result2.value;
         });
+        pull($http, "/users", {}, $scope, "users");
         $scope.customer = {};
         $scope.newProduct = {
             "name": "",
@@ -30,6 +31,14 @@ var settings = {
             "price": 0,
             "enabled": true,
             "category": ""
+        };
+        $scope.newUser = {
+            "username": "",
+            "password": "",
+            "storeAccess": false,
+            "officeAccess": false,
+            "settingsAccess": false,
+            "invalidateToken": false
         };
     },
     "saveCustomer": function() {
@@ -61,7 +70,7 @@ var settings = {
     },
     "saveProduct": function() {
         var fakescope = {};
-        pull($http, "/product/save", settings.$scope.selectedProduct, fakescope, "result", function() {
+        pull($http, "/product/save", settings.$scope.selectedProduct || settings.$scope.newProduct, fakescope, "result", function() {
             if ( fakescope.result.success ) {
                 alert("Product saved!");
                 // primary key must be calculated into the product $scope
@@ -71,6 +80,18 @@ var settings = {
             }
         });
         return false;
+    },
+    "saveUser": function() {
+        var fakescope = {};
+        pull($http, "/user/save", settings.$scope.selectedUser || settings.$scope.newUser, fakescope, "result", function() {
+            if ( fakescope.result.success ) {
+                alert("User saved!");
+                // primary key must be calculated into the user $scope
+                location.reload();
+            } else {
+                alert("Unable to save user");
+            }
+        });
     },
     "saveTaxes": function() {
         var fakescope = {};
@@ -130,6 +151,9 @@ function angularCallback($scope, $http) {
     $scope.selectProduct = function(product) {
         $scope.selectedProduct = product;
     };
+    $scope.selectUser = function(user) {
+        $scope.selectedUser = user;
+    };
     $scope.removeProperty = function($index) {
         $scope.customProperties.splice($index, 1);
     };
@@ -141,5 +165,5 @@ function angularCallback($scope, $http) {
 }
 
 function sufficientPermissions(permissions) {
-    return permissions.settings;
+    return permissions && permissions.settings;
 }

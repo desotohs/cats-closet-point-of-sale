@@ -1,0 +1,83 @@
+---
+layout: setting
+---
+<div class="container">
+    <div class="row">
+        <div class="col s8">
+            <div class="collection">
+                <a class="collection-item" ng-repeat="user in users" ng-bind="user.username" ng-click="selectUser(user)" ng-class="{selected: selectedUser == user}"></a>
+            </div>
+        </div>
+        <div class="col s4">
+            <div class="collection with-header">
+                <form action="#" method="GET" onsubmit="return settings.saveUser()">
+                    <a class="collection-item">
+                        <h4>
+                            <span ng-hide="selectedUser">
+                                Add
+                            </span>
+                            <span ng-show="selectedUser">
+                                Edit
+                            </span>
+                            User
+                        </h4>
+                    </a>
+                    <div class="collection-item input-field">
+                        Username:
+                        <input type="text" placeholder="Username" ng-model="newUser.username" ng-hide="selectedUser" />
+                        <input type="text" placeholder="Username" ng-model="selectedUser.username" ng-show="selectedUser" />
+                    </div>
+                    <div class="collection-item input-field">
+                        Password:
+                        <input type="password" placeholder="Password (empty to not change)" ng-model="newUser.password" ng-hide="selectedUser" />
+                        <input type="password" placeholder="Password (empty to not change)" ng-model="selectedUser.password" ng-show="selectedUser" />
+                    </div>
+                    <div class="collection-item">
+                        Permissions:
+                        <br />
+                        <input type="checkbox" id="storeAccessNew" ng-model="newUser.storeAccess" ng-hide="selectedUser" />
+                        <label for="storeAccessNew" ng-hide="selectedUser">
+                            Store Access
+                        </label>
+                        <input type="checkbox" id="storeAccessSelected" ng-model="selectedUser.storeAccess" ng-show="selectedUser" />
+                        <label for="storeAccessSelected" ng-show="selectedUser">
+                            Store Access
+                        </label>
+                        <br />
+                        <input type="checkbox" id="officeAccessNew" ng-model="newUser.officeAccess" ng-hide="selectedUser" />
+                        <label for="officeAccessNew" ng-hide="selectedUser">
+                            Office Access
+                        </label>
+                        <input type="checkbox" id="officeAccessSelected" ng-model="selectedUser.officeAccess" ng-show="selectedUser" />
+                        <label for="officeAccessSelected" ng-show="selectedUser">
+                            Office Access
+                        </label>
+                        <br />
+                        <input type="checkbox" id="settingsAccessNew" ng-model="newUser.settingsAccess" ng-hide="selectedUser" />
+                        <label for="settingsAccessNew" ng-hide="selectedUser">
+                            Settings Access
+                        </label>
+                        <input type="checkbox" id="settingsAccessSelected" ng-model="selectedUser.settingsAccess" ng-show="selectedUser" />
+                        <label for="settingsAccessSelected" ng-show="selectedUser">
+                            Settings Access
+                        </label>
+                    </div>
+                    <div class="collection-item" ng-show="selectedUser">
+                        <input type="checkbox" id="invalidateToken" ng-model="selectedUser.invalidateToken" />
+                        <label for="invalidateToken">
+                            Force logout
+                        </label>
+                    </div>
+                    <div class="collection-item">
+                        <button class="btn waves-effect waves-light" type="submit" name="action">
+                            Save
+                            <i class="material-icons right">
+                                send
+                            </i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

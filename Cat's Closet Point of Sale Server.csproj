@@ -144,6 +144,10 @@
     <Compile Include="Emails\EmailSystem.cs" />
     <Compile Include="Emails\EmailConnection.cs" />
     <Compile Include="Emails\EmailFactory.cs" />
+    <Compile Include="Model\Requests\SaveUserRequest.cs" />
+    <Compile Include="Model\Responses\UserResponse.cs" />
+    <Compile Include="Apis\UserList.cs" />
+    <Compile Include="Apis\SetUser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

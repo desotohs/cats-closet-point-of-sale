@@ -11,11 +11,13 @@ var office = {
             "barcode": $("#barcode").val()
         }, $scope, "customer", function() {
             location.href = "#step-2";
+            window.onhashchange();
         });
         return false;
     },
     "deposit": function() {
         location.href = "#step-3";
+        window.onhashchange();
         var fakeScope = {};
         pull(office.$http, "/deposit", {
             "barcode": $("#barcode").val(),
@@ -23,10 +25,12 @@ var office = {
         }, fakeScope, "status", function() {
             if ( fakeScope.status.success ) {
                 location.href = "#step-1";
+                window.onhashchange();
                 office.initModel(office.$scope, office.$http);
             } else {
                 alert("Unable to deposit money");
                 location.href = "#step-2";
+                window.onhashchange();
             }
         });
         return false;

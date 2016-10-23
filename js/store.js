@@ -38,6 +38,7 @@ var store = {
         }, $scope.shared.local, "customer", function() {
             if ( $scope.shared.local.customer ) {
                 location.href = "#step-2";
+                window.onhashchange();
             } else {
                 $("#barcode").val("");
             }
@@ -46,6 +47,7 @@ var store = {
     },
     "verifyAccount": function() {
         location.href = "#step-3";
+        window.onhashchange();
         $scope.shared.local.purchases = [];
         return false;
     },
@@ -62,6 +64,7 @@ var store = {
         }, fakeScope, "status", function() {
             if ( fakeScope.status.success ) {
                 location.href = "#step-1";
+                window.onhashchange();
                 store.initModel(store.$scope, store.$http);
             } else {
                 alert("Invalid pin");
@@ -71,6 +74,7 @@ var store = {
     },
     "purchase": function() {
         location.href = "#step-4";
+        window.onhashchange();
         if ( store.$scope.shared.local.customer.pinLength > 0 ) {
             store.$scope.$apply(function() {
                 store.$scope.shared.local.resetPass = Math.random();

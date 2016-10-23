@@ -65,6 +65,15 @@ function angularInit() {
         }
         window.$scope = $scope;
         window.$http = $http;
+        window.onhashchange = function() {
+            if ( location.hash.match(/^#step-[0-9]+$/) ) {
+                $scope.stepNum = parseInt(location.hash.substr(6));
+            }
+        };
+        window.onhashchange();
+        $scope.goBackAStep = function() {
+            location.hash = "#step-" + ($scope.stepNum - 1);
+        };
     });
 }
 

@@ -12,6 +12,15 @@
         </i>
     </a>
     <ul>
+        <li ng-show="stepNum > 1">
+            <abbr title="Back" style="border: none;" >
+                <a class="btn-floating blue" ng-click="goBackAStep()">
+                    <i class="material-icons">
+                        undo
+                    </i>
+                </a>
+            </abbr>
+        </li>
         <li>
             <abbr title="Log Out" style="border: none;">
                 <a class="btn-floating red" href="{{ "/" | prepend: site.baseurl }}">

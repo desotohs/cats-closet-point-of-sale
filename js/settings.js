@@ -28,7 +28,8 @@ var settings = {
             "desc": "",
             "picture": "",
             "price": 0,
-            "enabled": true
+            "enabled": true,
+            "category": ""
         };
     },
     "saveCustomer": function() {

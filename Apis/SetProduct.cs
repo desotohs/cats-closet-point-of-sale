@@ -20,6 +20,7 @@ namespace CatsCloset.Apis {
 				product.Enabled = req.enabled;
 				product.Name = req.name;
 				product.Price = req.price;
+				product.Category = req.category;
 				Context.SaveChanges();
 			}
 			return new StatusResponse(true);

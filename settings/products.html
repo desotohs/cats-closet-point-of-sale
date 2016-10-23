@@ -41,6 +41,11 @@ layout: setting
                         <input type="text" placeholder="Product Detail" ng-model="selectedProduct.desc" ng-show="selectedProduct" />
                     </div>
                     <div class="collection-item input-field">
+                        Category:
+                        <input type="text" placeholder="Product Category" ng-model="newProduct.category" ng-hide="selectedProduct" />
+                        <input type="text" placeholder="Product Category" ng-model="selectedProduct.category" ng-show="selectedProduct" />
+                    </div>
+                    <div class="collection-item input-field">
                         Price:
                         <input type="number" placeholder="Product Price" ng-model="newProduct.price" ng-hide="selectedProduct" />
                         <input type="number" placeholder="Product Price" ng-model="selectedProduct.price" ng-show="selectedProduct" />

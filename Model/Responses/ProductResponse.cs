@@ -8,6 +8,7 @@ namespace CatsCloset.Model.Responses {
 		public string picture;
 		public double price;
 		public bool enabled;
+		public string category;
 
 		public ProductResponse(Product product) {
 			id = product.Id;
@@ -16,6 +17,7 @@ namespace CatsCloset.Model.Responses {
 			picture = "/image/" + product.ImageId;
 			price = product.Price;
 			enabled = product.Enabled;
+			category = product.Category;
 		}
 	}
 }

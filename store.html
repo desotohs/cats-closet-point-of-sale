@@ -82,14 +82,17 @@ script: /js/store.js
     </div>
     <div class="row">
         <div class="col s8">
-            <div class="aspect-wrapper col s4" ng-repeat="product in products" ng-click="buy($index)">
-                <div class="card bg-cover aspect-3-4 z-depth-4" style="background-image: url('{{ "{{" }}product.picture}}')">
-                    <div class="card-content center white-text">
-                        <span class="card-title" ng-bind="product.name"></span>
-                        <p ng-bind="product.desc"></p>
-                        <i>
-                            <span ng-bind="product.price | currency"></span>
-                        </i>
+            <div class="row" ng-repeat="category in productsByCategory">
+                <h4 class="white-text" ng-bind="category.name"></h4>
+                <div class="aspect-wrapper col s4" ng-repeat="product in category.products" ng-click="buy($parent.$index, $index)">
+                    <div class="card bg-cover aspect-3-4 z-depth-4" style="background-image: url('{{ "{{" }}product.picture}}')">
+                        <div class="card-content center white-text">
+                            <span class="card-title" ng-bind="product.name"></span>
+                            <p ng-bind="product.desc"></p>
+                            <i>
+                                <span ng-bind="product.price | currency"></span>
+                            </i>
+                        </div>
                     </div>
                 </div>
             </div>

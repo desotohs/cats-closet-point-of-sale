@@ -1,6 +1,22 @@
 var store = {
     "initModel": function($scope, $http) {
-        pull($http, "/products/enabled", {}, $scope, "products");
+        pull($http, "/products/enabled", {}, $scope, "products", function() {
+            $scope.productsByCategory = [];
+            mainloop: for ( var i = 0; i < $scope.products.length; ++i ) {
+                for ( var j = 0; j < $scope.productsByCategory.length; ++j ) {
+                    if ( $scope.products[i].category == $scope.productsByCategory[j].name ) {
+                        $scope.productsByCategory[j].products.push($scope.products[i]);
+                        continue mainloop;
+                    }
+                }
+                $scope.productsByCategory.push({
+                    "name": $scope.products[i].category,
+                    "products": [
+                        $scope.products[i]
+                    ]
+                });
+            }
+        });
         $scope.shared = {
             "local": {
                 "store": true,
@@ -99,11 +115,11 @@ var store = {
 function angularCallback($scope, $http) {
     store.initModel($scope, $http);
     store.initDisplay($scope, $http);
-    $scope.buy = function($index) {
+    $scope.buy = function(category$index, $index) {
         $scope.shared.local.purchases.push({
-            "product": $scope.products[$index]
+            "product": $scope.productsByCategory[category$index].products[$index]
         });
-        $scope.shared.local.total += $scope.products[$index].price;
+        $scope.shared.local.total += $scope.productsByCategory[category$index].products[$index].price;
     };
     $scope.cancelPurchase = function($index) {
         var purchase = $scope.shared.local.purchases.splice($index, 1)[0];

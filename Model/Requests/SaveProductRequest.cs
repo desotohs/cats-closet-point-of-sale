@@ -7,6 +7,7 @@ namespace CatsCloset.Model.Requests {
 		public string desc;
 		public double price;
 		public bool enabled;
+		public string category;
 	}
 }
 

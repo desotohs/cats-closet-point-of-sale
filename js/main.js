@@ -133,3 +133,5 @@ setTimeout(function() {
         location.href = "{{ "/" | prepend: site.baseurl }}";
     }
 }, 0);
+
+window.onload = initBugReport;

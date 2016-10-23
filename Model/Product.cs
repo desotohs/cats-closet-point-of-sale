@@ -40,6 +40,11 @@ namespace CatsCloset.Model {
 			get;
 			set;
 		}
+
+		public string Category {
+			get;
+			set;
+		}
 	}
 }
 

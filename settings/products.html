@@ -3,8 +3,8 @@ layout: setting
 ---
 <div class="container">
     <div class="row">
-        <div class="col s8">
-            <div class="aspect-wrapper col s4" ng-repeat="product in products" ng-click="selectProduct(product)">
+        <div class="col s8 product-container">
+            <div class="aspect-wrapper col s3" ng-repeat="product in products" ng-click="selectProduct(product)">
                 <div class="card bg-cover aspect-3-4 z-depth-4 product-card" style="background-image: url('{{ "{{" }}product.picture}}')">
                     <div class="card-content center white-text">
                         <span class="card-title" ng-bind="product.name"></span>

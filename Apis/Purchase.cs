@@ -11,12 +11,19 @@ namespace CatsCloset.Apis {
 			User user = RequireAuthentication();
 			AccessRequire(user.StoreAccess);
 			lock ( Context ) {
+				double taxFactor = 1 +
+					double.Parse((
+						Context.Options
+						.FirstOrDefault(
+							o => o.Key == "Tax")
+						?? new Option() { Value = "0" })
+						.Value);
 				double cost = req.purchases
 				.Select(
 			             i => Context.Products
 					.First(
 			             p => p.Id == i)
-					.Price)
+					.Price * taxFactor)
 				.Sum();
 				Customer customer = Context.Customers
 				.First(

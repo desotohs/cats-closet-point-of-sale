@@ -12,7 +12,7 @@ namespace CatsCloset.Apis {
 				return Context.Products
 					.ToArray()
 					.Select(
-						p => new ProductResponse(p));
+						p => new ProductResponse(p, Context));
 			}
 		}
 

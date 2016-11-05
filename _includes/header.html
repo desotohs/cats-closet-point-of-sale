@@ -14,7 +14,8 @@
     <ul>
         <li ng-show="stepNum > 1">
             <abbr title="Back" style="border: none;" >
-                <a class="btn-floating blue" ng-click="goBackAStep()">
+                <a class="btn-floating blue" ng-click="goBackAStep()"
+                   ng-class="{blue: _pa + _ps + _po == 3, red: _pa + _ps + _po == 2, yellow: _pa + _ps + _po == 1, green: _pa + _ps + _po == 0}">
                     <i class="material-icons">
                         undo
                     </i>
@@ -23,7 +24,8 @@
         </li>
         <li>
             <abbr title="Log Out" style="border: none;">
-                <a class="btn-floating red" href="{{ "/" | prepend: site.baseurl }}">
+                <a class="btn-floating red" href="{{ "/" | prepend: site.baseurl }}"
+                   ng-class="{red: _pa + _ps + _po == 3, yellow: _pa + _ps + _po == 2, green: _pa + _ps + _po == 1, blue: _pa + _ps + _po == 0}">
                     <i class="material-icons">
                         exit_to_app
                     </i>
@@ -32,7 +34,8 @@
         </li>
         <li ng-show="permissions.office">
             <abbr title="Office" style="border: none;">
-                <a class="btn-floating yellow darken-1" href="{{ "/office/" | prepend: site.baseurl }}">
+                <a class="btn-floating" href="{{ "/office/" | prepend: site.baseurl }}"
+                   ng-class="{yellow: _pa + _ps == 2, green: _pa + _ps == 1, blue: _pa + _ps == 0}">
                     <i class="material-icons">
                         attach_money
                     </i>
@@ -41,7 +44,8 @@
         </li>
         <li ng-show="permissions.store">
             <abbr title="Store" style="border: none;">
-                <a class="btn-floating green" href="{{ "/store/" | prepend: site.baseurl }}">
+                <a class="btn-floating" href="{{ "/store/" | prepend: site.baseurl }}"
+                   ng-class="{green: _pa == 1, blue: _pa == 0}">
                     <i class="material-icons">
                         shopping_cart
                     </i>

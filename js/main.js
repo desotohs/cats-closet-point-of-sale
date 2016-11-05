@@ -59,6 +59,9 @@ function angularInit() {
                     location.href = "{{ "/" | prepend: site.baseurl }}";
                 }
             }
+            $scope._po = $scope.permissions.office ? 1 : 0;
+            $scope._ps = $scope.permissions.store ? 1 : 0;
+            $scope._pa = $scope.permissions.settings ? 1 : 0;
         });
         if ( window.angularCallback ) {
             angularCallback($scope, $http);

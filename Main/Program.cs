@@ -46,17 +46,26 @@ namespace CatsCloset.Main {
 				try {
 					Console.WriteLine(request.RequestUri);
 					return ApiFactory.HandleRequest(request, ctx);
-				} catch ( Exception ex ) {
-					Console.Error.WriteLine(ex);
-					if ( ex is DbEntityValidationException ) {
-						foreach ( DbEntityValidationResult result in ((DbEntityValidationException) ex).EntityValidationErrors ) {
-							foreach ( DbValidationError error in result.ValidationErrors ) {
-								Console.WriteLine("Error: {2} in {0}.{1}", result.Entry.Entity.GetType().FullName, error.PropertyName, error.ErrorMessage);
-							}
+				} catch ( DbEntityValidationException ex ) {
+					foreach ( DbEntityValidationResult result in ex.EntityValidationErrors ) {
+						foreach ( DbValidationError error in result.ValidationErrors ) {
+							Console.WriteLine("Error: {2} in {0}.{1}", result.Entry.Entity.GetType().FullName, error.PropertyName, error.ErrorMessage);
 						}
 					}
-					return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+				} catch ( InvalidOperationException ex ) {
+					if ( ex.Message == "Unexpected connection state. When using a wrapping provider ensure that the StateChange event is implemented on the wrapped DbConnection." ) {
+						try {
+							return ApiFactory.HandleRequest(request, ctx);
+						} catch ( Exception ex2 ) {
+							Console.Error.WriteLine(ex2);
+						}
+					} else {
+						Console.Error.WriteLine(ex);
+					}
+				} catch ( Exception ex ) {
+					Console.Error.WriteLine(ex);
 				}
+				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			});
 		}
 

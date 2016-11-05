@@ -10,7 +10,7 @@ namespace CatsCloset.Apis {
 	public static class ApiFactory {
 		private static List<IApi> Apis;
 
-		private static void PopulateApiList(Context ctx) {
+		private static void PopulateApiList() {
 			Apis = new List<IApi>();
 			Apis.AddRange(
 				Assembly.GetExecutingAssembly()
@@ -23,19 +23,21 @@ namespace CatsCloset.Apis {
 					t => t.GetConstructor(new Type[0])
 					.Invoke(new object[0]))
 				.Cast<IApi>());
-			Apis.ForEach(a => a.Context = ctx);
 		}
 
-		private static void EnsureApiListPopulated(Context ctx) {
+		private static void EnsureApiListPopulated() {
 			if ( Apis == null ) {
-				PopulateApiList(ctx);
+				PopulateApiList();
 			}
 		}
 
 		public static HttpResponseMessage HandleRequest(HttpRequestMessage msg, Context ctx) {
-			EnsureApiListPopulated(ctx);
+			EnsureApiListPopulated();
 			HttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);
-			if ( !Apis.Any(a => a[msg, res]) ) {
+			if ( !Apis.Any(a => {
+				a.Context = ctx;
+				return a[msg, res];
+			}) ) {
 				return new HttpResponseMessage(HttpStatusCode.NotFound);
 			}
 			return res;

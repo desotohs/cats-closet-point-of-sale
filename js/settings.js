@@ -9,7 +9,15 @@ var settings = {
                 data: map
             });
         });
-        pull($http, "/products", {}, $scope, "products");
+        pull($http, "/products", {}, $scope, "products", function() {
+            var map = {};
+            for ( var i = 0; i < $scope.products.length; ++i ) {
+                map[$scope.products[i].name] = null;
+            }
+            $("#product").autocomplete({
+                data: map
+            });
+        });
         pull($http, "/properties", {}, $scope, "customProperties");
         var fakescope = {};
         pull($http, "/option", {
@@ -40,6 +48,7 @@ var settings = {
             "settingsAccess": false,
             "invalidateToken": false
         };
+        $scope.links = [];
     },
     "saveCustomer": function() {
         var fakescope = {};
@@ -131,6 +140,32 @@ var settings = {
             }
         });
         return false;
+    },
+    "saveImages": function() {
+        var file = document.getElementById("image").files[0];
+        if ( file.size > 0 ) {
+            var reader = new FileReader();
+            reader.addEventListener("load", function() {
+                var req = {
+                    "data": reader.result.split(',')[1],
+                    "customerNames": [],
+                    "productIds": []
+                };
+                for ( var i = 0; i < settings.$scope.links.length; ++i ) {
+                    req[settings.$scope.links[i].type].push(settings.$scope.links[i].id);
+                }
+                var fakescope = {};
+                pull(settings.$http, "/image/save", req, fakescope, "result", function() {
+                    if ( fakescope.result.success ) {
+                        Materialize.toast("Image saved!", 4000);
+                    } else {
+                        alert("Image save failed!");
+                    }
+                });
+            }, false);
+            reader.readAsDataURL(file);
+        }
+        return false;
     }
 };
 
@@ -159,6 +194,35 @@ function angularCallback($scope, $http) {
     };
     $scope.addProperty = function() {
         $scope.customProperties.push(prompt("What should the new property be called?"));
+    };
+    $scope.removeLink = function($index) {
+        $scope.links.splice($index, 1);
+    };
+    $scope.linkProduct = function() {
+        var product = null;
+        for ( var i = 0; i < $scope.products.length; ++i ) {
+            if ( $scope.products[i].name == $scope.productname ) {
+                product = $scope.products[i];
+                break;
+            }
+        }
+        if ( product == null ) {
+            return;
+        }
+        $scope.links.push({
+            "name": $scope.productname,
+            "type": "productIds",
+            "id": product.id
+        });
+    };
+    $scope.linkCustomer = function() {
+        if ( $scope.isCustomer($scope.customername) ) {
+            $scope.links.push({
+                "name": $scope.customername,
+                "type": "customerNames",
+                "id": $scope.customername
+            });
+        }
     };
     settings.$scope = $scope;
     settings.$http = $http;

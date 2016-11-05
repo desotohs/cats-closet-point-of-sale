@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 
 namespace CatsCloset.Apis {
-	public class Image : AbstractApi<int, byte[]> {
+	public class GetImage : AbstractApi<int, byte[]> {
 		public override bool this[string url] {
 			get {
 				return url.StartsWith(Url);
@@ -29,7 +29,7 @@ namespace CatsCloset.Apis {
 			}
 		}
 
-		public Image() : base("/image/") {
+		public GetImage() : base("/image/") {
 		}
 	}
 }

@@ -1,4 +1,12 @@
 @echo off
+title Cat's Closet Point of Sale Server
 
-cats-closet-point-of-sale.exe
-pause
+net session 1>NUL 2>NUL
+if "%errorlevel%" == "0" (
+	cd %~dp0
+	cats-closet-point-of-sale
+	pause
+) else (
+	powershell "saps -filepath %0 -verb runas"
+)
+exit /b

@@ -5,3 +5,5 @@ bin/
 *.userprefs
 obj/
 packages/
+.vs/
+*.csproj.user

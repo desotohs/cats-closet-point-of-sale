@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Tracing;
 using Microsoft.Owin.Hosting;
 using Owin;
 using CatsCloset.Apis;
@@ -71,6 +72,7 @@ namespace CatsCloset.Main {
 
 		public void Configuration(IAppBuilder appBuilder) {
 			HttpConfiguration config = new HttpConfiguration();
+            config.EnableSystemDiagnosticsTracing().MinimumLevel = TraceLevel.Warn;
 			config.Routes.MapHttpRoute("APIs", "", null, null, this);
 			config.MessageHandlers.Add(this);
 			config.EnsureInitialized();
@@ -85,7 +87,7 @@ namespace CatsCloset.Main {
 			SessionMonitor monitor = new SessionMonitor(ctx);
 			monitor.PurgeSessions();
 			EmailSystem.Init(ctx);
-			using ( WebApp.Start<Program>("http://*:8888/") ) {
+			using ( WebApp.Start<Program>("http://+:8888/") ) {
 				monitor.Start();
 				Console.WriteLine("Application started.");
 				if ( Environment.UserInteractive ) {

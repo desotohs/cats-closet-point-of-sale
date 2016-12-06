@@ -11,7 +11,7 @@ var login = {
         }, fakescope, "result", function() {
             if ( fakescope.result.token ) {
                 sessionStorage.token = fakescope.result.token;
-                location.href = "{{ "/welcome/" | prepend: site.baseurl }}";
+                location.href = "{{ "/welcome" | prepend: site.baseurl }}";
             } else {
                 Materialize.toast("Invalid credentials", 4000);
             }
@@ -21,7 +21,7 @@ var login = {
     "connect": function() {
         sessionStorage.server = $("#server2").val();
         sessionStorage.displayToken = $("#token").val();
-        location.href = "{{ "/screen/" | prepend: site.baseurl }}";
+        location.href = "{{ "/screen" | prepend: site.baseurl }}";
         return false;
     },
     "init": function() {

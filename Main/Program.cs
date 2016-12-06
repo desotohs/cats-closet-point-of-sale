@@ -69,8 +69,6 @@ namespace CatsCloset.Main {
 			});
 		}
 
-
-
 		public void Configuration(IAppBuilder appBuilder) {
 			HttpConfiguration config = new HttpConfiguration();
 			config.Routes.MapHttpRoute("APIs", "", null, null, this);
@@ -87,7 +85,7 @@ namespace CatsCloset.Main {
 			SessionMonitor monitor = new SessionMonitor(ctx);
 			monitor.PurgeSessions();
 			EmailSystem.Init(ctx);
-			using ( WebApp.Start<Program>("http://*:8080") ) {
+			using ( WebApp.Start<Program>("http://*:8888/") ) {
 				monitor.Start();
 				Console.WriteLine("Application started.");
 				if ( Environment.UserInteractive ) {

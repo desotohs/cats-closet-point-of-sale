@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography;
+using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,8 +80,8 @@ namespace CatsCloset.Main {
 			appBuilder.UseWebApi(config);
 		}
 
-		public static void Main(string[] args) {
-			ctx = new Context();
+        public static void RunServer(bool interactive) {
+            ctx = new Context();
 			ctx.Database.CreateIfNotExists();
 			ctx.Database.Initialize(false);
 			EnsureUserExists();
@@ -90,7 +91,7 @@ namespace CatsCloset.Main {
 			using ( WebApp.Start<Program>("http://+:8888/") ) {
 				monitor.Start();
 				Console.WriteLine("Application started.");
-				if ( Environment.UserInteractive ) {
+				if ( interactive ) {
 					Console.WriteLine("Press any key to stop the server");
 					Console.ReadKey();
 				} else {
@@ -104,6 +105,21 @@ namespace CatsCloset.Main {
 				}
 				Console.WriteLine("Shutting down server...");
 			}
+        }
+
+		public static void Main(string[] args) {
+			if ( args.Length > 0 ) {
+                switch ( args[0] ) {
+                    case "launch":
+                        RunServer(true);
+                        break;
+                    default:
+                        ServiceBase.Run(new Service());
+                        break;
+                }
+            } else {
+                ServiceBase.Run(new Service());
+            }
 		}
 	}
 }

@@ -21,7 +21,8 @@ var store = {
             "local": {
                 "store": true,
                 "total": 0,
-                "customer": {}
+                "customer": {},
+                "pinDigit": false
             }
         };
         var fakescope = {};
@@ -79,12 +80,14 @@ var store = {
             store.$scope.$apply(function() {
                 store.$scope.shared.local.resetPass = Math.random();
                 store.$scope.shared.local.promptPass = true;
+                store.$scope.shared.local.pinDigit = null;
             });
             var unbind = $scope.$watch("shared.remote.pin", function(newValue) {
-                if ( newValue.length == $scope.shared.local.customer.pinLength ) {
+                if ( newValue && newValue.length == $scope.shared.local.customer.pinLength ) {
                     unbind();
                     store.sendPurchase();
                     store.$scope.shared.local.resetPass = Math.random();
+                    store.$scope.shared.local.pinDigit = false;
                 }
             });
         } else {
@@ -138,9 +141,15 @@ function sufficientPermissions(permissions) {
 }
 
 window.onkeypress = function(e) {
-    if ( e.keyCode == 13 ) {
-        store.onBarcodeScan();
+    if ( store.$scope.shared.local.pinDigit === false ) {
+        if ( e.keyCode == 13 ) {
+            store.onBarcodeScan();
+        } else if ( e.key.length == 1 ) {
+            $("#barcode").val($("#barcode").val() + e.key);
+        }
     } else if ( e.key.length == 1 ) {
-        $("#barcode").val($("#barcode").val() + e.key);
+        store.$scope.$apply(function() {
+            store.$scope.shared.local.pinDigit = e.key;
+        });
     }
 };

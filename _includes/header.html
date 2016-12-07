@@ -34,7 +34,7 @@
         </li>
         <li ng-show="permissions.office">
             <abbr title="Office" style="border: none;">
-                <a class="btn-floating" href="{{ "/office/" | prepend: site.baseurl }}"
+                <a class="btn-floating" href="{{ "/office" | prepend: site.baseurl }}"
                    ng-class="{yellow: _pa + _ps == 2, green: _pa + _ps == 1, blue: _pa + _ps == 0}">
                     <i class="material-icons">
                         attach_money
@@ -44,7 +44,7 @@
         </li>
         <li ng-show="permissions.store">
             <abbr title="Store" style="border: none;">
-                <a class="btn-floating" href="{{ "/store/" | prepend: site.baseurl }}"
+                <a class="btn-floating" href="{{ "/store" | prepend: site.baseurl }}"
                    ng-class="{green: _pa == 1, blue: _pa == 0}">
                     <i class="material-icons">
                         shopping_cart
@@ -54,7 +54,7 @@
         </li>
         <li ng-show="permissions.settings">
             <abbr title="Settings" style="border: none;">
-                <a class="btn-floating blue" href="{{ "/settings/" | prepend: site.baseurl }}">
+                <a class="btn-floating blue" href="{{ "/settings" | prepend: site.baseurl }}">
                     <i class="material-icons">
                         settings
                     </i>

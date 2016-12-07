@@ -10,6 +10,9 @@ var screen = {
                 session.initRecv($http, data.toDisplay);
                 session.onRead = function(data) {
                     $scope.shared.remote = data;
+                    if ( $scope.shared.remote.pinDigit ) {
+
+                    }
                 };
                 session.send({
                     "connected": true
@@ -25,6 +28,11 @@ var screen = {
         $scope.$watch("shared.remote.resetPass", function(newValue, oldValue) {
             if ( newValue != oldValue ) {
                 $scope.shared.local.pin = "";
+            }
+        });
+        $scope.$watch("shared.remote.pinDigit", function(newValue, oldValue) {
+            if ( newValue && newValue != oldValue ) {
+                $scope.shared.local.pin += "" + $scope.shared.remote.pinDigit;
             }
         });
     }

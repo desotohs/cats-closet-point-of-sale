@@ -3,7 +3,7 @@
 
 var login = {
     "login": function() {
-        sessionStorage.server = $("#server").val();
+        localStorage.serverUrl = sessionStorage.server = $("#server").val();
         var fakescope = {};
         pull(login.$http, "/authenticate", {
             "username": $("#username").val(),
@@ -19,13 +19,18 @@ var login = {
         return false;
     },
     "connect": function() {
-        sessionStorage.server = $("#server2").val();
+        localStorage.serverUrl = sessionStorage.server = $("#server2").val();
         sessionStorage.displayToken = $("#token").val();
         location.href = "{{ "/screen" | prepend: site.baseurl }}";
         return false;
     },
     "init": function() {
         sessionStorage.token = "";
+        if (localStorage.serverUrl) {
+            $(window).ready(() => {
+                $("#server").val(localStorage.serverUrl);
+            });
+        }
     }
 };
 

@@ -18,6 +18,8 @@ using CatsCloset.Model;
 
 namespace CatsCloset.Main {
 	public class Program : DelegatingHandler {
+		private const int MaxTries = 5;
+		private const int RetryTimeout = 10;
 		private static Context ctx;
 
 		private static void EnsureUserExists() {
@@ -45,26 +47,24 @@ namespace CatsCloset.Main {
 
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
 			return Task.Run(() => {
-				try {
-					Console.WriteLine(request.RequestUri);
-					return ApiFactory.HandleRequest(request, ctx);
-				} catch ( DbEntityValidationException ex ) {
-					foreach ( DbEntityValidationResult result in ex.EntityValidationErrors ) {
-						foreach ( DbValidationError error in result.ValidationErrors ) {
-							Console.WriteLine("Error: {2} in {0}.{1}", result.Entry.Entity.GetType().FullName, error.PropertyName, error.ErrorMessage);
+				Console.WriteLine(request.RequestUri);
+				Exception[] exs = new Exception[MaxTries];
+				for ( int i = 0; i < MaxTries; ++i ) {
+					try {
+						return ApiFactory.HandleRequest(request, ctx);
+					} catch ( DbEntityValidationException ex ) {
+						foreach ( DbEntityValidationResult result in ex.EntityValidationErrors ) {
+							foreach ( DbValidationError error in result.ValidationErrors ) {
+								Console.WriteLine("Error: {2} in {0}.{1}", result.Entry.Entity.GetType().FullName, error.PropertyName, error.ErrorMessage);
+							}
 						}
+					} catch ( Exception ex ) {
+						exs[i] = ex;
+						Thread.Sleep(RetryTimeout);
 					}
-				} catch ( InvalidOperationException ex ) {
-					if ( ex.Message == "Unexpected connection state. When using a wrapping provider ensure that the StateChange event is implemented on the wrapped DbConnection." ) {
-						try {
-							return ApiFactory.HandleRequest(request, ctx);
-						} catch ( Exception ex2 ) {
-							Console.Error.WriteLine(ex2);
-						}
-					} else {
-						Console.Error.WriteLine(ex);
-					}
-				} catch ( Exception ex ) {
+				}
+				Console.Error.WriteLine("Request for {0} crashed {1} times; max. retries failed.", request.RequestUri, MaxTries);
+				foreach ( Exception ex in exs ) {
 					Console.Error.WriteLine(ex);
 				}
 				return new HttpResponseMessage(HttpStatusCode.InternalServerError);

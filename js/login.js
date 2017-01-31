@@ -27,9 +27,7 @@ var login = {
     "init": function() {
         sessionStorage.token = "";
         if (localStorage.serverUrl) {
-            $(window).ready(() => {
-                $("#server").val(localStorage.serverUrl);
-            });
+            $(window).ready(() => $("[name='server']").val(localStorage.serverUrl));
         }
     }
 };

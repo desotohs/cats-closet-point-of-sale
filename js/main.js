@@ -153,3 +153,11 @@ setTimeout(function() {
 }, 0);
 
 window.onload = initBugReport;
+
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".autocomplete").next(".autocomplete-content").on("click", function() {
+            $(this).prev(".autocomplete").trigger("change");
+        });
+    }, 1000);
+});

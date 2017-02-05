@@ -71,8 +71,23 @@ var store = {
                 window.onhashchange();
                 store.initModel(store.$scope, store.$http);
             } else {
-                alert("Invalid pin");
-                store.purchase();
+                Materialize.toast("Invalid pin", 4000);
+                store.$scope.shared.local.alert = "Invalid pin";
+                store.$scope.shared.local.alertHash = Math.random();
+                store.$scope.shared.local.pinDigit = null;
+                var unbind = $scope.$watch("shared.remote.pin", function(newValue) {
+                    if (newValue && newValue.length != $scope.shared.local.customer.pinLength) {
+                        unbind();
+                        unbind = $scope.$watch("shared.remote.pin", function(newValue) {
+                            if (newValue && newValue.length == $scope.shared.local.customer.pinLength) {
+                                unbind();
+                                store.sendPurchase();
+                                store.$scope.shared.local.resetPass = Math.random();
+                                store.$scope.shared.local.pinDigit = false;
+                            }
+                        });
+                    }
+                });
             }
         });
     },

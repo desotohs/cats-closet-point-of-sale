@@ -28,9 +28,12 @@ namespace CatsCloset.Apis {
 				Customer customer = Context.Customers
 				.First(
                    c => c.Barcode ==
-						req.barcode &&
-						c.Pin == req.pin);
-				if ( customer.Balance >= cost ) {
+						req.barcode);
+				if (customer.Pin.Trim('-').Length == 0) {
+					customer.Pin = req.pin;
+					customer.SendSetPinEmail();
+				}
+				if (customer.Pin == req.pin && customer.Balance >= cost) {
 					customer.Balance -= cost;
 					History history = new History();
 					history.BalanceChange = -cost;

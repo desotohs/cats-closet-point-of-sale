@@ -68,6 +68,11 @@ script: /js/screen.js
     <div class="row" ng-show="shared.remote.promptPass">
         <div class="col s2">
             <h5 class="white-text">
+                <span ng-show="shared.remote.customer.pin && pinNeedsSet(shared.remote.customer.pin)">
+                    Please Choose a
+                    <span ng-bind="shared.remote.customer.pinLength"></span>
+                    -digit
+                </span>
                 Pin:
             </h5>
         </div>

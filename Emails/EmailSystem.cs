@@ -44,6 +44,10 @@ namespace CatsCloset.Emails {
 		public static void SendDepositEmail(this Customer customer, History deposit) {
 			SendEmail("DepositEmail.html", customer, deposit);
 		}
+
+		public static void SendSetPinEmail(this Customer customer) {
+			SendEmail("SetPinEmail.html", customer, null);
+		}
 	}
 }
 

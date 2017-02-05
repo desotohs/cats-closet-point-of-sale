@@ -40,5 +40,8 @@ var screen = {
 
 function angularCallback($scope, $http) {
     screen.init($scope, $http);
+    $scope.pinNeedsSet = function(pin) {
+        return pin.match(/^-*$/) != null;
+    };
     screen.initWatches($scope);
 }

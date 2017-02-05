@@ -143,6 +143,7 @@ function onPageChange(page) {
     if (page == 1) {
         store.$scope.$apply(function() {
             store.$scope.shared.local.customer = null;
+            store.$scope.shared.local.promptPass = false;
         });
         $("#barcode").val("");
     } else if (page == 3) {

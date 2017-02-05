@@ -23,6 +23,8 @@ namespace CatsCloset.Emails {
 					.Value;
 			case "Customer.Balance":
 				return FormatCurrency(customer.Balance);
+			case "Customer.Pin":
+				return customer.Pin;
 			case "Purchase.Name":
 				return purchase.Product.Name;
 			case "Purchase.Quantity":

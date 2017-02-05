@@ -117,7 +117,7 @@ script: /js/store.js
                             </i>
                         </button>
                     </form>
-                    <p class="red-text" ng-show="shared.local.total < 0 || shared.local.total > shared.local.customer.balance">
+                    <p class="red-text" ng-show="shared.local.total > shared.local.customer.balance">
                         NOT ENOUGH MONEY IN ACCOUNT
                     </p>
                 </div>

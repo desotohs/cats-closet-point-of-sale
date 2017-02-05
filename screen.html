@@ -10,7 +10,7 @@ script: /js/screen.js
             </h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row" ng-show="shared.remote.customer">
         <div class="col s8" ng-show="shared.remote.customer.name">
             <h4 class="white-text">
                 <span ng-bind="shared.remote.customer.name"></span>,
@@ -27,7 +27,7 @@ script: /js/screen.js
                     <span ng-bind="purchase.product.name"></span>
                     (<span ng-bind="purchase.product.price | currency"></span>)
                 </a>
-                <div class="collection-item" ng-show="shared.remote.total < 0 || shared.remote.total > shared.remote.customer.balance">
+                <div class="collection-item" ng-show="shared.remote.total > shared.remote.customer.balance">
                     <p class="red-text">
                         NOT ENOUGH MONEY IN ACCOUNT
                     </p>
@@ -40,7 +40,7 @@ script: /js/screen.js
             </div>
         </div>
     </div>
-    <div class="row" ng-hide="shared.remote.total <= 0 || shared.remote.total > shared.remote.customer.balance">
+    <div class="row" ng-hide="shared.remote.total <= 0 || shared.remote.total > shared.remote.customer.balance || !shared.remote.customer">
         <div class="collection with-header">
             <a class="collection-item">
                 <h4>

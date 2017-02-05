@@ -71,11 +71,17 @@ function angularInit() {
         window.onhashchange = function() {
             if ( location.hash.match(/^#step-[0-9]+$/) ) {
                 $scope.stepNum = parseInt(location.hash.substr(6));
+                if (window.onPageChange) {
+                    window.onPageChange($scope.stepNum);
+                }
             }
         };
         window.onhashchange();
         $scope.goBackAStep = function() {
             location.hash = "#step-" + ($scope.stepNum - 1);
+            if (window.onPageChange) {
+                window.onPageChange($scope.stepNum - 1);
+            }
         };
     });
 }

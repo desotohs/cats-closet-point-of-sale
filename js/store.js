@@ -38,6 +38,8 @@ var store = {
             "barcode": $("#barcode").val()
         }, $scope.shared.local, "customer", function() {
             if ( $scope.shared.local.customer ) {
+                $scope.shared.local.purchases = [];
+                $scope.shared.local.total = 0;
                 location.href = "#step-2";
                 window.onhashchange();
             } else {
@@ -50,6 +52,7 @@ var store = {
         location.href = "#step-3";
         window.onhashchange();
         $scope.shared.local.purchases = [];
+        $scope.shared.local.total = 0;
         return false;
     },
     "sendPurchase": function() {
@@ -134,6 +137,19 @@ function angularCallback($scope, $http) {
     };
     store.$scope = $scope;
     store.$http = $http;
+}
+
+function onPageChange(page) {
+    if (page == 1) {
+        store.$scope.$apply(function() {
+            store.$scope.shared.local.customer = null;
+        });
+        $("#barcode").val("");
+    } else if (page == 3) {
+        store.$scope.$apply(function() {
+            store.$scope.shared.local.promptPass = false;
+        });
+    }
 }
 
 function sufficientPermissions(permissions) {

@@ -81,9 +81,16 @@ namespace CatsCloset.Main {
 		}
 
         public static void RunServer(bool interactive) {
-            ctx = new Context();
-			ctx.Database.CreateIfNotExists();
-			ctx.Database.Initialize(false);
+			while (true) {
+				try {
+					ctx = new Context();
+					ctx.Database.CreateIfNotExists();
+					ctx.Database.Initialize(false);
+					break;
+				} catch (Exception ex) {
+					Console.WriteLine(ex);
+				}
+			}
 			EnsureUserExists();
 			SessionMonitor monitor = new SessionMonitor(ctx);
 			monitor.PurgeSessions();

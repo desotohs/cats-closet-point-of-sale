@@ -41,21 +41,23 @@ namespace CatsCloset.Imports {
 			using (CsvFile csv = new CsvFile(Zip.GetInputStream(Csv))) {
 				while (csv.NextLine()) {
 					if (!barcodes.Contains(csv["Barcode", null])) {
-						Customer customer = new Customer();
-						customer.Barcode = csv["Barcode", ""];
-						customer.Balance = csv["Balance", 0];
-						customer.Name = csv["Name", ""];
-						customer.Pin = csv["Pin", "-----"];
-						customer.Image = img;
-						ctx.Customers.Add(customer);
-						foreach (CustomProperty prop in ctx.CustomProperties) {
-							CustomerProperty p = new CustomerProperty();
-							p.Customer = customer;
-							p.Property = prop;
-							p.Value = csv[prop.Name, ""];
-							ctx.CustomerProperties.Add(p);
+						lock (ctx) {
+							Customer customer = new Customer();
+							customer.Barcode = csv["Barcode", ""];
+							customer.Balance = csv["Balance", 0];
+							customer.Name = csv["Name", ""];
+							customer.Pin = csv["Pin", "-----"];
+							customer.Image = img;
+							ctx.Customers.Add(customer);
+							foreach (CustomProperty prop in ctx.CustomProperties) {
+								CustomerProperty p = new CustomerProperty();
+								p.Customer = customer;
+								p.Property = prop;
+								p.Value = csv[prop.Name, ""];
+								ctx.CustomerProperties.Add(p);
+							}
+							ctx.SaveChanges();
 						}
-						ctx.SaveChanges();
 					}
 					++CompleteSteps;
 				}

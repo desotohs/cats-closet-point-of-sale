@@ -33,28 +33,30 @@ namespace CatsCloset.Imports {
 				string[] dirs = entry.Name.Split('/');
 				string[] parts = dirs[dirs.Length - 1].ToLower().Split('_');
 				string name = string.Concat(parts[1], ' ', parts[0]);
-				Customer customer = ctx.Customers
-					.FirstOrDefault(
-						c => c.Name.ToLower().Equals(name));
-				if (customer != null) {
-					Image old = customer.Image;
-					Image import = new Image();
-					import.Data = new byte[entry.Size];
-					using (Stream stream = Zip.GetInputStream(entry)) {
-						stream.Read(import.Data, 0, import.Data.Length);
-					}
-					customer.Image = import;
-					ctx.SaveChanges();
-					if (old.Data != null &&
-						!(ctx.Customers
+				lock (ctx) {
+					Customer customer = ctx.Customers
+						.FirstOrDefault(
+	                   		c => c.Name.ToLower().Equals(name));
+					if (customer != null) {
+						Image old = customer.Image;
+						Image import = new Image();
+						import.Data = new byte[entry.Size];
+						using (Stream stream = Zip.GetInputStream(entry)) {
+							stream.Read(import.Data, 0, import.Data.Length);
+						}
+						customer.Image = import;
+						ctx.SaveChanges();
+						if (old.Data != null &&
+						   !(ctx.Customers
 							.Any(
-								c => c.ImageId == old.Id) ||
-							ctx.Products
+							   c => c.ImageId == old.Id) ||
+						   ctx.Products
 							.Any(
-								p => p.ImageId == old.Id))) {
-						ctx.Images.Remove(old);
+							   p => p.ImageId == old.Id))) {
+							ctx.Images.Remove(old);
+						}
+						ctx.SaveChanges();
 					}
-					ctx.SaveChanges();
 				}
 				++CompleteSteps;
 			}

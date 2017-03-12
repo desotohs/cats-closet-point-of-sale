@@ -24,7 +24,7 @@ namespace CatsCloset.Apis {
 			if ( req.Method != HttpMethod.Options ) {
 				int reqObj = int.Parse(req.RequestUri.AbsolutePath.Substring(Url.Length));
 				byte[] img = Handle(reqObj);
-				res.Content = new ByteArrayContent(img);
+				res.Content = new ByteArrayContent(img == null ? new byte[0] : img);
 				res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(Magic.GetMime(img));
 			}
 		}

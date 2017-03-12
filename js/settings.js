@@ -224,6 +224,32 @@ function angularCallback($scope, $http) {
             });
         }
     };
+    $scope.import = function() {
+        var rdr = new FileReader();
+        rdr.addEventListener("load", function() {
+            var callback = function() {
+                if ($scope.importData.error) {
+                    Materialize.toast($scope.importData.error, 4000);
+                    $scope.importData = null;
+                }
+                if ($scope.importData.completeSteps != $scope.importData.totalSteps) {
+                    setTimeout(function() {
+                        pull($http, "/import/status", "'" + $scope.importData.importId + "'", $scope, "importData", callback);
+                    }, 100);
+                }
+            };
+            pull($http, "/import/start", {
+                "type": $scope.importType,
+                "data": rdr.result.split(",")[1]
+            }, $scope, "importData", callback);
+        });
+        rdr.readAsDataURL($("#importFile")[0].files[0]);
+    };
+    $scope.getImportProgress = function() {
+        return {
+            "width": "" + ($scope.importData ? $scope.importData.completeSteps * 100 / $scope.importData.totalSteps : 0) + "%"
+        };
+    };
     settings.$scope = $scope;
     settings.$http = $http;
 }

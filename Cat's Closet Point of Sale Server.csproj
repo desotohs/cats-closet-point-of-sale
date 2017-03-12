@@ -92,6 +92,9 @@
     <Reference Include="System.Web.Http.Tracing, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <HintPath>packages\Microsoft.AspNet.WebApi.Tracing.5.2.3\lib\net45\System.Web.Http.Tracing.dll</HintPath>
     </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main\Service.cs">
@@ -169,6 +172,15 @@
     <Compile Include="Model\Requests\ImageRequest.cs" />
     <Compile Include="Apis\SetImage.cs" />
     <Compile Include="Apis\GetImage.cs" />
+    <Compile Include="Imports\ImportSystem.cs" />
+    <Compile Include="Imports\IImporter.cs" />
+    <Compile Include="Imports\CustomerImporter.cs" />
+    <Compile Include="Imports\CsvFile.cs" />
+    <Compile Include="Imports\TestImporter.cs" />
+    <Compile Include="Apis\StartImport.cs" />
+    <Compile Include="Model\Requests\ImportRequest.cs" />
+    <Compile Include="Model\Responses\ImportResponse.cs" />
+    <Compile Include="Apis\ImportStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -203,5 +215,8 @@
     <None Include="SetPinEmail.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Imports\" />
   </ItemGroup>
 </Project>

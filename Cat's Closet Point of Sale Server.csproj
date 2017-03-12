@@ -181,6 +181,7 @@
     <Compile Include="Model\Requests\ImportRequest.cs" />
     <Compile Include="Model\Responses\ImportResponse.cs" />
     <Compile Include="Apis\ImportStatus.cs" />
+    <Compile Include="Imports\PictureImporter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

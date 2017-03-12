@@ -76,6 +76,40 @@ layout: setting
                     </p>
                 </div>
             </div>
+            <div class="row" ng-switch-when="2">
+                <p class="white-text">
+                    Please upload a zip file containing all of the pictures for the customers.
+                    The folder the picture is in does not have any effect on the import process.
+                    Below is a list of supported filenames:
+                </p>
+                <table class="bordered white">
+                    <thead>
+                        <tr>
+                            <th>
+                                File Name
+                            </th>
+                            <th>
+                                Notes
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="2">
+                                Doe_John_123.jpg
+                            </td>
+                            <td>
+                                Capitalization does not matter
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                The number at the end does not matter
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div ng-show="importType" class="row">
             <div class="file-field input-field col s12">

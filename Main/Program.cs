@@ -95,6 +95,7 @@ namespace CatsCloset.Main {
 			SessionMonitor monitor = new SessionMonitor(ctx);
 			monitor.PurgeSessions();
 			EmailSystem.Init(ctx);
+			PurchaseReporter reporter = new PurchaseReporter(ctx);
 			using ( WebApp.Start<Program>("http://+:8888/") ) {
 				monitor.Start();
 				Console.WriteLine("Application started.");
@@ -112,6 +113,7 @@ namespace CatsCloset.Main {
 				}
 				Console.WriteLine("Shutting down server...");
 			}
+			reporter.Stop();
         }
 
 		public static void Main(string[] args) {

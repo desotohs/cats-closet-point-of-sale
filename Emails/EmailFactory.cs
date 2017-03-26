@@ -14,17 +14,14 @@ namespace CatsCloset.Emails {
 			return string.Format("${0:N2}", value);
 		}
 
-		private object GetReplacement(string name, Context ctx, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase) {
+		private object GetReplacement(string name, Context ctx, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate) {
 			switch ( name ) {
-			case "Options.StoreName":
-				return ctx.Options
-					.First(
-						o => o.Key == "StoreName")
-					.Value;
 			case "Customer.Balance":
 				return FormatCurrency(customer.Balance);
 			case "Customer.Pin":
 				return customer.Pin;
+			case "Customer.Name":
+				return customer.Name;
 			case "Purchase.Name":
 				return purchase.Product.Name;
 			case "Purchase.Quantity":
@@ -37,6 +34,11 @@ namespace CatsCloset.Emails {
 				return recentPurchase.Time;
 			case "RecentPurchase.Amount":
 				return FormatCurrency(-recentPurchase.BalanceChange);
+			case "Options.StoreName":
+				return ctx.Options
+					.First(
+						o => o.Key == "StoreName")
+					.Value;
 			case "Options.AdminEmail":
 				return ctx.Options
 					.First(
@@ -47,12 +49,14 @@ namespace CatsCloset.Emails {
 					.First(
 						o => o.Key == "MailingAddress")
 					.Value;
+			case "Report.Date":
+				return reportDate.ToShortDateString();
 			default:
-				throw new ArgumentException("Unknown replacement token");
+				throw new ArgumentException(string.Format("Unknown replacement token '{0}'", name));
 			}
 		}
 
-		private void Replace(Context ctx, XmlElement element, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase) {
+		private void Replace(Context ctx, XmlElement element, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate) {
 			foreach ( XmlElement child in element.ChildNodes
 				.Cast<XmlNode>()
 				.Where(
@@ -68,7 +72,7 @@ namespace CatsCloset.Emails {
 						a.Value == "replacement")) ) {
 				// Each of these is a replacement span
 				child.RemoveAttribute("class");
-				child.InnerText = GetReplacement(child.InnerText, ctx, customer, currentPurchase, purchase, recentPurchase).ToString();
+				child.InnerText = GetReplacement(child.InnerText, ctx, customer, currentPurchase, purchase, recentPurchase, reportDate).ToString();
 				if ( child.Name == "a" ) {
 					child.SetAttribute("href", string.Concat(child.InnerText.Contains("@") ? "mailto:" : "", child.InnerText));
 				}
@@ -84,38 +88,63 @@ namespace CatsCloset.Emails {
 					.Any(
 					     a => a.Name == "class" &&
 					     a.Value == "repeat") ) {
+					IEnumerable<Customer> customers;
+					IEnumerable<History> currentPurchases;
 					IEnumerable<HistoryPurchase> purchases;
 					IEnumerable<History> recentPurchases;
 					switch ( child.GetAttribute("data-repeat") ) {
 					case "Purchases":
-						purchases = currentPurchase.Purchases;
+						purchases = currentPurchase.BalanceChange > 0 ? new HistoryPurchase[] {
+							new HistoryPurchase() {
+								Product = new Product() {
+									Name = "Deposit",
+									Price = currentPurchase.BalanceChange
+								},
+								Amount = 1
+							}
+						} : currentPurchase.Purchases.ToArray();
+						customers = Enumerable.Repeat(customer, purchases.Count());
+						currentPurchases = Enumerable.Repeat(currentPurchase, purchases.Count());
 						recentPurchases = Enumerable.Repeat(recentPurchase, purchases.Count());
 						break;
 					case "RecentPurchases":
+						customers = Enumerable.Repeat(customer, 5);
+						currentPurchases = Enumerable.Repeat(currentPurchase, 5);
 						purchases = Enumerable.Repeat(purchase, 5);
 						recentPurchases = customer.PurchaseHistory.Where(h => h.BalanceChange < 0).OrderByDescending(h => h.Time).Take(5);
+						break;
+					case "DailyPurchases":
+						DateTime lowerBound = reportDate.Date;
+						DateTime upperBound = reportDate.Date.AddDays(1);
+						currentPurchases = recentPurchases = ctx.History.Where(h => h.Time >= lowerBound && h.Time <= upperBound).ToArray();
+						customers = recentPurchases.Select(h => h.Customer).ToArray();
+						purchases = Enumerable.Repeat(purchase, recentPurchases.Count()).ToArray();
 						break;
 					default:
 						throw new ArgumentException("Unknown repeat token");
 					}
-					using ( IEnumerator<HistoryPurchase> purchaseEnum = purchases.GetEnumerator() ) {
-						using ( IEnumerator<History> recentPurchaseEnum = recentPurchases.GetEnumerator() ) {
-							while ( purchaseEnum.MoveNext() && recentPurchaseEnum.MoveNext() ) {
-								XmlElement clone = (XmlElement) child.Clone();
-								element.AppendChild(clone);
-								Replace(ctx, clone, customer, currentPurchase, purchaseEnum.Current, recentPurchaseEnum.Current);
+					using (IEnumerator<Customer> customerEnum = customers.GetEnumerator()) {
+						using (IEnumerator<History> currentPurchaseEnum = currentPurchases.GetEnumerator()) {
+							using (IEnumerator<HistoryPurchase> purchaseEnum = purchases.GetEnumerator()) {
+								using (IEnumerator<History> recentPurchaseEnum = recentPurchases.GetEnumerator()) {
+									while (customerEnum.MoveNext() && currentPurchaseEnum.MoveNext() && purchaseEnum.MoveNext() && recentPurchaseEnum.MoveNext()) {
+										XmlElement clone = (XmlElement) child.Clone();
+										element.AppendChild(clone);
+										Replace(ctx, clone, customerEnum.Current, currentPurchaseEnum.Current, purchaseEnum.Current, recentPurchaseEnum.Current, reportDate);
+									}
+								}
 							}
 						}
 					}
 					element.RemoveChild(child);
 				} else {
-					Replace(ctx, child, customer, currentPurchase, purchase, recentPurchase);
+					Replace(ctx, child, customer, currentPurchase, purchase, recentPurchase, reportDate);
 				}
 			}
 		}
 
-		public void Replace(Context ctx, Customer customer, History currentPurchase) {
-			Replace(ctx, EmailDocument.DocumentElement, customer, currentPurchase, null, null);
+		public void Replace(Context ctx, Customer customer, History currentPurchase, DateTime reportDate) {
+			Replace(ctx, EmailDocument.DocumentElement, customer, currentPurchase, null, null, reportDate);
 		}
 
 		public override string ToString() {

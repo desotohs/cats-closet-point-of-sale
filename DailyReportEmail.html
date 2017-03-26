@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<html>
+	<head>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css" />
+		<style>
+			.replacement, span.repeat {
+				font-style: italic;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col s12">
+					<h3>
+						<span class="replacement">Options.StoreName</span> Daily Report
+					</h3>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<p>
+						Following is a list of all purchases that have occurred on <span class="replacement">Report.Date</span>.
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<table class="highlight">
+						<thead>
+							<tr>
+								<th>
+									Customer Name
+								</th>
+								<th>
+									Purchase Amount
+								</th>
+								<th>
+									Remaining Balance
+								</th>
+								<th>
+									Purchased Items
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<span class="repeat" data-repeat="DailyPurchases">
+								<tr class="repeat" data-repeat="DailyPurchases">
+									<td>
+										<span class="replacement">Customer.Name</span>
+									</td>
+									<td>
+										<span class="replacement">Purchases.Total</span>
+									</td>
+									<td>
+										<span class="replacement">Customer.Balance</span>
+									</td>
+									<td>
+										<div class="collection">
+											<span class="repeat" data-repeat="Purchases">
+												<a class="collection-item">
+													<span class="replacement">Purchase.Quantity</span>
+													x
+													<span class="replacement">Purchase.Name</span>
+												</a>
+											</span>
+										</div>
+									</td>
+								</tr>
+							</span>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col s12">
+					If you have any questions, please contact
+					<a class="replacement">Options.AdminEmail</a>.
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<small>
+						<span class="replacement">Options.MailingAddress</span>
+						<br />
+						To unsubscribe, please email <a class="replacement">Options.AdminEmail</a>.
+					</small>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

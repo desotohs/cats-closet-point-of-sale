@@ -1,8 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Validation;
+using System.Data.Entity.Migrations;
+using System.Data.Entity.Migrations.Design;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Resources;
 using System.Security.Cryptography;
 using System.ServiceProcess;
 using System.Text;
@@ -14,6 +20,7 @@ using Microsoft.Owin.Hosting;
 using Owin;
 using CatsCloset.Apis;
 using CatsCloset.Emails;
+using CatsCloset.Migrations;
 using CatsCloset.Model;
 
 namespace CatsCloset.Main {
@@ -81,6 +88,7 @@ namespace CatsCloset.Main {
 		}
 
         public static void RunServer(bool interactive) {
+			Database.SetInitializer(new MigrateDatabaseToLatestVersion<Context, MigrationConfig>());
 			while (true) {
 				try {
 					ctx = new Context();
@@ -122,6 +130,22 @@ namespace CatsCloset.Main {
                     case "launch":
                         RunServer(true);
                         break;
+					case "add-migration":
+						if (args.Length == 1) {
+							Console.Error.WriteLine("Please provide a name for the migration");
+						} else {
+							MigrationConfig config = new MigrationConfig();
+							MigrationScaffolder scaffolder = new MigrationScaffolder(config);
+							ScaffoldedMigration migration = scaffolder.Scaffold(args[1]);
+							File.WriteAllText(Path.Combine("..", "..", "Migrations", string.Concat(migration.MigrationId, ".cs")), migration.UserCode);
+							File.WriteAllText(Path.Combine("..", "..", "Migrations", string.Concat(migration.MigrationId, ".Designer.cs")), migration.DesignerCode);
+							using (ResourceWriter writer = new ResourceWriter(Path.Combine("..", "..", "Migrations", string.Concat(migration.MigrationId, ".resources")))) {
+								foreach (KeyValuePair<string, object> resource in migration.Resources) {
+									writer.AddResource(resource.Key, resource.Value);
+								}
+							}
+						}
+						break;
                     default:
                         ServiceBase.Run(new Service());
                         break;

@@ -22,7 +22,7 @@ namespace CatsCloset.Model.Responses {
 					.FirstOrDefault(
 						o => o.Key == "Tax")
 					?? new Option() { Value = "0" })
-					.Value));
+					.Value)) / 100.0;
 			enabled = product.Enabled;
 			category = product.Category;
 		}

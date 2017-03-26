@@ -15,9 +15,9 @@ namespace CatsCloset.Apis {
 				.First(
 					c => c.Barcode ==
                    req.barcode);
-				customer.Balance += req.amount;
+				customer.Balance += (int) (req.amount * 100);
 				History history = new History();
-				history.BalanceChange = req.amount;
+				history.BalanceChange = (int) (req.amount * 100);
 				history.Customer = customer;
 				history.Time = DateTime.Now;
 				history.User = user;

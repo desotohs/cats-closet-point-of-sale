@@ -22,7 +22,7 @@ namespace CatsCloset.Apis {
 					Context.Customers.Add(customer);
 				}
 				customer.Barcode = req.code;
-				customer.Balance = req.balance;
+				customer.Balance = (int) (req.balance * 100);
 				foreach ( CustomerProperty prop in customer.Properties.ToArray() ) {
 					KeyValuePair newProp = req.properties
 					.FirstOrDefault(

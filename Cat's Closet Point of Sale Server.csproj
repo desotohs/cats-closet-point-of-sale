@@ -183,6 +183,11 @@
     <Compile Include="Apis\ImportStatus.cs" />
     <Compile Include="Imports\PictureImporter.cs" />
     <Compile Include="Main\PurchaseReporter.cs" />
+    <Compile Include="Migrations\MigrationConfig.cs" />
+    <Compile Include="Migrations\201703261629418_InitialVersion.Designer.cs" />
+    <Compile Include="Migrations\201703261629418_InitialVersion.cs" />
+    <Compile Include="Migrations\201703261637105_IntegerPrices.Designer.cs" />
+    <Compile Include="Migrations\201703261637105_IntegerPrices.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -200,6 +205,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main\ProjectInstaller.resx">
       <DependentUpon>ProjectInstaller.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703261629418_InitialVersion.resources">
+      <LogicalName>CatsCloset.Migrations.InitialVersion.resources</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703261637105_IntegerPrices.resources">
+      <LogicalName>CatsCloset.Migrations.IntegerPrices.resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -223,5 +234,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Imports\" />
+    <Folder Include="Migrations\" />
   </ItemGroup>
 </Project>

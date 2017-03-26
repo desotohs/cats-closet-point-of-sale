@@ -44,7 +44,7 @@ namespace CatsCloset.Imports {
 						lock (ctx) {
 							Customer customer = new Customer();
 							customer.Barcode = csv["Barcode", ""];
-							customer.Balance = csv["Balance", 0];
+							customer.Balance = (int) (csv["Balance", 0] * 100);
 							customer.Name = csv["Name", ""];
 							customer.Pin = csv["Pin", "-----"];
 							customer.Image = img;

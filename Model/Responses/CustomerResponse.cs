@@ -14,7 +14,7 @@ namespace CatsCloset.Model.Responses {
 
 		public CustomerResponse(Customer customer, bool includePin) {
 			name = customer.Name;
-			balance = customer.Balance;
+			balance = customer.Balance / 100.0;
 			picture = "/image/" + customer.ImageId;
 			code = customer.Barcode;
 			pin = includePin ? customer.Pin : null;

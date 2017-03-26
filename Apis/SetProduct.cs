@@ -19,7 +19,7 @@ namespace CatsCloset.Apis {
 				product.Description = req.desc;
 				product.Enabled = req.enabled;
 				product.Name = req.name;
-				product.Price = req.price;
+				product.Price = (int) (req.price * 100);
 				product.Category = req.category;
 				Context.SaveChanges();
 			}

@@ -38,7 +38,7 @@ namespace CatsCloset.Model {
 			set;
 		}
 
-		public double BalanceChange {
+		public int BalanceChange {
 			get;
 			set;
 		}

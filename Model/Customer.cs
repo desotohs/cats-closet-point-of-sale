@@ -16,7 +16,7 @@ namespace CatsCloset.Model {
 			set;
 		}
 
-		public double Balance {
+		public int Balance {
 			get;
 			set;
 		}

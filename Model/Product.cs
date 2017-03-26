@@ -31,7 +31,7 @@ namespace CatsCloset.Model {
 			set;
 		}
 
-		public double Price {
+		public int Price {
 			get;
 			set;
 		}

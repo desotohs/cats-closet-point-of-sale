@@ -18,13 +18,13 @@ namespace CatsCloset.Apis {
 							o => o.Key == "Tax")
 						?? new Option() { Value = "0" })
 						.Value);
-				double cost = req.purchases
+				int cost = (int) (req.purchases
 				.Select(
 			             i => Context.Products
 					.First(
 			             p => p.Id == i)
-					.Price * taxFactor)
-				.Sum();
+					.Price)
+				.Sum() * taxFactor);
 				Customer customer = Context.Customers
 				.First(
                    c => c.Barcode ==

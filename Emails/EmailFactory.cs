@@ -10,8 +10,8 @@ namespace CatsCloset.Emails {
 	public class EmailFactory {
 		public readonly XmlDocument EmailDocument;
 
-		private string FormatCurrency(double value) {
-			return string.Format("${0:N2}", value);
+		private string FormatCurrency(int value) {
+			return string.Format("${0:N2}", value / 100.0);
 		}
 
 		private object GetReplacement(string name, Context ctx, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate) {

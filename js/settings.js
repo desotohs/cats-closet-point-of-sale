@@ -38,7 +38,8 @@ var settings = {
             "picture": "",
             "price": 0,
             "enabled": true,
-            "category": ""
+            "category": "",
+            "inventory": 0
         };
         $scope.newUser = {
             "username": "",
@@ -46,7 +47,8 @@ var settings = {
             "storeAccess": false,
             "officeAccess": false,
             "settingsAccess": false,
-            "invalidateToken": false
+            "invalidateToken": false,
+            "inventory": 0
         };
         $scope.links = [];
     },

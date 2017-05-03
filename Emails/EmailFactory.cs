@@ -131,12 +131,12 @@ namespace CatsCloset.Emails {
 						products = Enumerable.Repeat(product, recentPurchases.Count());
 						break;
 					case "Products":
-						int c = ctx.Products.Count();
+						products = ctx.Products.Where(p => p.Enabled);
+						int c = products.Count();
 						customers = Enumerable.Repeat(customer, c);
 						currentPurchases = Enumerable.Repeat(currentPurchase, c);
 						purchases = Enumerable.Repeat(purchase, c);
 						recentPurchases = Enumerable.Repeat(recentPurchase, c);
-						products = ctx.Products;
 						break;
 					default:
 						throw new ArgumentException("Unknown repeat token");

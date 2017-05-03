@@ -214,6 +214,9 @@
     <EmbeddedResource Include="Migrations\201703261637105_IntegerPrices.resources">
       <LogicalName>CatsCloset.Migrations.IntegerPrices.resources</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201705031858554_InventoryAmount.resources">
+      <LogicalName>CatsCloset.Migrations.InventoryAmount.resources</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -233,7 +236,6 @@
     <None Include="DailyReportEmail.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Migrations\201705031858554_InventoryAmount.resources" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Imports\" />

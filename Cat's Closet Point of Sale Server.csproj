@@ -188,6 +188,8 @@
     <Compile Include="Migrations\201703261629418_InitialVersion.cs" />
     <Compile Include="Migrations\201703261637105_IntegerPrices.Designer.cs" />
     <Compile Include="Migrations\201703261637105_IntegerPrices.cs" />
+    <Compile Include="Migrations\201705031858554_InventoryAmount.Designer.cs" />
+    <Compile Include="Migrations\201705031858554_InventoryAmount.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -231,6 +233,7 @@
     <None Include="DailyReportEmail.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Migrations\201705031858554_InventoryAmount.resources" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Imports\" />

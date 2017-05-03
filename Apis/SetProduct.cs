@@ -21,6 +21,7 @@ namespace CatsCloset.Apis {
 				product.Name = req.name;
 				product.Price = (int) (req.price * 100);
 				product.Category = req.category;
+				product.InventoryAmount = req.inventory;
 				Context.SaveChanges();
 			}
 			return new StatusResponse(true);

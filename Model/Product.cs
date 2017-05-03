@@ -45,6 +45,11 @@ namespace CatsCloset.Model {
 			get;
 			set;
 		}
+
+		public int InventoryAmount {
+			get;
+			set;
+		}
 	}
 }
 

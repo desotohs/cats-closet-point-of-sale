@@ -75,6 +75,48 @@
 			<br />
 			<div class="row">
 				<div class="col s12">
+					<p>
+						Following is a list of all products that are currently active (on <span class="replacement">Report.Date</span>).
+					</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col s12">
+					<table class="highlight">
+						<thead>
+							<tr>
+								<th>
+									Product Name
+								</th>
+								<th>
+									Price
+								</th>
+								<th>
+									Inventory Remaining
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<span class="repeat" data-repeat="Products">
+								<tr class="repeat" data-repeat="Products">
+									<td>
+										<span class="replacement">Product.Name</span>
+									</td>
+									<td>
+										<span class="replacement">Product.Price</span>
+									</td>
+									<td>
+										<span class="replacement">Product.Inventory</span>
+									</td>
+								</tr>
+							</span>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col s12">
 					If you have any questions, please contact
 					<a class="replacement">Options.AdminEmail</a>.
 				</div>

@@ -14,7 +14,7 @@ namespace CatsCloset.Emails {
 			return string.Format("${0:N2}", value / 100.0);
 		}
 
-		private object GetReplacement(string name, Context ctx, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate) {
+		private object GetReplacement(string name, Context ctx, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate, Product product) {
 			switch ( name ) {
 			case "Customer.Balance":
 				return FormatCurrency(customer.Balance);
@@ -22,6 +22,12 @@ namespace CatsCloset.Emails {
 				return customer.Pin;
 			case "Customer.Name":
 				return customer.Name;
+			case "Product.Inventory":
+				return product.InventoryAmount;
+			case "Product.Name":
+				return product.Name;
+			case "Product.Price":
+				return FormatCurrency(product.Price);
 			case "Purchase.Name":
 				return purchase.Product.Name;
 			case "Purchase.Quantity":
@@ -56,7 +62,7 @@ namespace CatsCloset.Emails {
 			}
 		}
 
-		private void Replace(Context ctx, XmlElement element, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate) {
+		private void Replace(Context ctx, XmlElement element, Customer customer, History currentPurchase, HistoryPurchase purchase, History recentPurchase, DateTime reportDate, Product product) {
 			foreach ( XmlElement child in element.ChildNodes
 				.Cast<XmlNode>()
 				.Where(
@@ -72,7 +78,7 @@ namespace CatsCloset.Emails {
 						a.Value == "replacement")) ) {
 				// Each of these is a replacement span
 				child.RemoveAttribute("class");
-				child.InnerText = GetReplacement(child.InnerText, ctx, customer, currentPurchase, purchase, recentPurchase, reportDate).ToString();
+				child.InnerText = GetReplacement(child.InnerText, ctx, customer, currentPurchase, purchase, recentPurchase, reportDate, product).ToString();
 				if ( child.Name == "a" ) {
 					child.SetAttribute("href", string.Concat(child.InnerText.Contains("@") ? "mailto:" : "", child.InnerText));
 				}
@@ -92,6 +98,7 @@ namespace CatsCloset.Emails {
 					IEnumerable<History> currentPurchases;
 					IEnumerable<HistoryPurchase> purchases;
 					IEnumerable<History> recentPurchases;
+					IEnumerable<Product> products;
 					switch ( child.GetAttribute("data-repeat") ) {
 					case "Purchases":
 						purchases = currentPurchase.BalanceChange > 0 ? new HistoryPurchase[] {
@@ -106,12 +113,14 @@ namespace CatsCloset.Emails {
 						customers = Enumerable.Repeat(customer, purchases.Count());
 						currentPurchases = Enumerable.Repeat(currentPurchase, purchases.Count());
 						recentPurchases = Enumerable.Repeat(recentPurchase, purchases.Count());
+						products = Enumerable.Repeat(product, purchases.Count());
 						break;
 					case "RecentPurchases":
 						customers = Enumerable.Repeat(customer, 5);
 						currentPurchases = Enumerable.Repeat(currentPurchase, 5);
 						purchases = Enumerable.Repeat(purchase, 5);
 						recentPurchases = customer.PurchaseHistory.Where(h => h.BalanceChange < 0).OrderByDescending(h => h.Time).Take(5);
+						products = Enumerable.Repeat(product, 5);
 						break;
 					case "DailyPurchases":
 						DateTime lowerBound = reportDate.Date;
@@ -119,6 +128,15 @@ namespace CatsCloset.Emails {
 						currentPurchases = recentPurchases = ctx.History.Where(h => h.Time >= lowerBound && h.Time <= upperBound).ToArray();
 						customers = recentPurchases.Select(h => h.Customer).ToArray();
 						purchases = Enumerable.Repeat(purchase, recentPurchases.Count()).ToArray();
+						products = Enumerable.Repeat(product, recentPurchases.Count());
+						break;
+					case "Products":
+						int c = ctx.Products.Count();
+						customers = Enumerable.Repeat(customer, c);
+						currentPurchases = Enumerable.Repeat(currentPurchase, c);
+						purchases = Enumerable.Repeat(purchase, c);
+						recentPurchases = Enumerable.Repeat(recentPurchase, c);
+						products = ctx.Products;
 						break;
 					default:
 						throw new ArgumentException("Unknown repeat token");
@@ -127,10 +145,12 @@ namespace CatsCloset.Emails {
 						using (IEnumerator<History> currentPurchaseEnum = currentPurchases.GetEnumerator()) {
 							using (IEnumerator<HistoryPurchase> purchaseEnum = purchases.GetEnumerator()) {
 								using (IEnumerator<History> recentPurchaseEnum = recentPurchases.GetEnumerator()) {
-									while (customerEnum.MoveNext() && currentPurchaseEnum.MoveNext() && purchaseEnum.MoveNext() && recentPurchaseEnum.MoveNext()) {
-										XmlElement clone = (XmlElement) child.Clone();
-										element.AppendChild(clone);
-										Replace(ctx, clone, customerEnum.Current, currentPurchaseEnum.Current, purchaseEnum.Current, recentPurchaseEnum.Current, reportDate);
+									using (IEnumerator<Product> productEnum = products.GetEnumerator()) {
+										while (customerEnum.MoveNext() && currentPurchaseEnum.MoveNext() && purchaseEnum.MoveNext() && recentPurchaseEnum.MoveNext() && productEnum.MoveNext()) {
+											XmlElement clone = (XmlElement) child.Clone();
+											element.AppendChild(clone);
+											Replace(ctx, clone, customerEnum.Current, currentPurchaseEnum.Current, purchaseEnum.Current, recentPurchaseEnum.Current, reportDate, productEnum.Current);
+										}
 									}
 								}
 							}
@@ -138,13 +158,13 @@ namespace CatsCloset.Emails {
 					}
 					element.RemoveChild(child);
 				} else {
-					Replace(ctx, child, customer, currentPurchase, purchase, recentPurchase, reportDate);
+					Replace(ctx, child, customer, currentPurchase, purchase, recentPurchase, reportDate, product);
 				}
 			}
 		}
 
 		public void Replace(Context ctx, Customer customer, History currentPurchase, DateTime reportDate) {
-			Replace(ctx, EmailDocument.DocumentElement, customer, currentPurchase, null, null, reportDate);
+			Replace(ctx, EmailDocument.DocumentElement, customer, currentPurchase, null, null, reportDate, null);
 		}
 
 		public override string ToString() {

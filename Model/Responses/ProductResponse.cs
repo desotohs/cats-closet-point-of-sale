@@ -10,6 +10,7 @@ namespace CatsCloset.Model.Responses {
 		public double price;
 		public bool enabled;
 		public string category;
+		public int inventory;
 
 		public ProductResponse(Product product, Context context) {
 			id = product.Id;
@@ -25,6 +26,7 @@ namespace CatsCloset.Model.Responses {
 					.Value)) / 100.0;
 			enabled = product.Enabled;
 			category = product.Category;
+			inventory = product.InventoryAmount;
 		}
 	}
 }

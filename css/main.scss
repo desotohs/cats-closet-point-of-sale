@@ -56,7 +56,8 @@ img {
 }
 .product-card {
     background-color: #7F7F7F;
-    background-blend-mode: darken;
+    background-size: cover;
+    background-position: center;
 }
 .product-container {
     height: 80vh;

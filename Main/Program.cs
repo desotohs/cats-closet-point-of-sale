@@ -125,6 +125,7 @@ namespace CatsCloset.Main {
         }
 
 		public static void Main(string[] args) {
+			Logging.Init();
 			if ( args.Length > 0 ) {
                 switch ( args[0] ) {
                     case "launch":

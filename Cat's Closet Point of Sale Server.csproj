@@ -190,6 +190,7 @@
     <Compile Include="Migrations\201703261637105_IntegerPrices.cs" />
     <Compile Include="Migrations\201705031858554_InventoryAmount.Designer.cs" />
     <Compile Include="Migrations\201705031858554_InventoryAmount.cs" />
+    <Compile Include="Main\Logging.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using CatsCloset.Model;
 using CatsCloset.Model.Requests;
@@ -14,6 +15,10 @@ namespace CatsCloset.Apis {
 		                 p => p.Id == req.id);
 				if ( product == null ) {
 					product = new Product();
+					Image image = new Image();
+					image.Data = File.ReadAllBytes("Assets/default-product.png");
+					Context.Images.Add(image);
+					product.Image = image;
 					Context.Products.Add(product);
 				}
 				product.Description = req.desc;

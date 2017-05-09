@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.Resources;
 using System.Security.Cryptography;
 using System.ServiceProcess;
@@ -125,6 +126,8 @@ namespace CatsCloset.Main {
         }
 
 		public static void Main(string[] args) {
+			UriBuilder uri = new UriBuilder(Assembly.GetExecutingAssembly().CodeBase);
+			Environment.CurrentDirectory = Path.GetDirectoryName(Uri.UnescapeDataString(uri.Path));
 			Logging.Init();
 			if ( args.Length > 0 ) {
                 switch ( args[0] ) {

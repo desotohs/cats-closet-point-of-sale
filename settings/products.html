@@ -40,10 +40,14 @@ layout: setting
                         <input type="text" placeholder="Product Detail" ng-model="newProduct.desc" ng-hide="selectedProduct" />
                         <input type="text" placeholder="Product Detail" ng-model="selectedProduct.desc" ng-show="selectedProduct" />
                     </div>
-                    <div class="collection-item input-field">
+                    <div class="collection-item autocomplete-list-item">
                         Category:
-                        <input type="text" placeholder="Product Category" ng-model="newProduct.category" ng-hide="selectedProduct" />
-                        <input type="text" placeholder="Product Category" ng-model="selectedProduct.category" ng-show="selectedProduct" />
+                        <div ng-hide="selectedProduct" class="input-field">
+                            <input type="text" placeholder="Product Category" ng-model="newProduct.category" class="autocomplete product-category-autocomplete" />
+                        </div>
+                        <div ng-show="selectedProduct" class="input-field">
+                            <input type="text" placeholder="Product Category" ng-model="selectedProduct.category" class="autocomplete product-category-autocomplete" />
+                        </div>
                     </div>
                     <div class="collection-item input-field">
                         Price:

@@ -11,11 +11,16 @@ var settings = {
         });
         pull($http, "/products", {}, $scope, "products", function() {
             var map = {};
+            var catMap = {};
             for ( var i = 0; i < $scope.products.length; ++i ) {
                 map[$scope.products[i].name] = null;
+                catMap[$scope.products[i].category] = null;
             }
             $("#product").autocomplete({
                 data: map
+            });
+            $(".product-category-autocomplete").autocomplete({
+                data: catMap
             });
         });
         pull($http, "/properties", {}, $scope, "customProperties");

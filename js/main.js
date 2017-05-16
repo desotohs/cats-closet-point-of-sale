@@ -66,6 +66,10 @@ function angularInit() {
         if ( window.angularCallback ) {
             angularCallback($scope, $http);
         }
+        $scope.openDisplay = function() {
+            sessionStorage.displayToken = $scope.displayToken;
+            open("{{ "/screen" | prepend: site.baseurl }}", "catscloset-display");
+        };
         window.$scope = $scope;
         window.$http = $http;
         window.onhashchange = function() {

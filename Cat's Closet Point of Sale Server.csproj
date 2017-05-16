@@ -191,6 +191,7 @@
     <Compile Include="Migrations\201705031858554_InventoryAmount.Designer.cs" />
     <Compile Include="Migrations\201705031858554_InventoryAmount.cs" />
     <Compile Include="Main\Logging.cs" />
+    <Compile Include="Apis\SessionSendEvent.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

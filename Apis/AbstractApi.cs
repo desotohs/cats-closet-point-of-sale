@@ -13,9 +13,9 @@ namespace CatsCloset.Apis {
 		private HttpRequestMessage CurrentRequest;
 		protected readonly string Url;
 
-		public Context Context {
-			protected get;
-			set;
+		protected Context Context {
+			get;
+			private set;
 		}
 
 		public virtual bool this[string url] {
@@ -70,18 +70,18 @@ namespace CatsCloset.Apis {
 				Task<string> contentTask = req.Content.ReadAsStringAsync();
 				contentTask.Wait();
 				TReq reqObj = JsonConvert.DeserializeObject<TReq>(contentTask.Result);
-				TRes resObj;
 				try {
 					lock ( Lock ) {
 						CurrentRequest = req;
-						resObj = Handle(reqObj);
+						using (Context = new Context()) {
+							resStr = JsonConvert.SerializeObject(Handle(reqObj));
+						}
 					}
 				} catch ( UnauthorizedAccessException ) {
 					res.StatusCode = HttpStatusCode.Forbidden;
 					res.Content = new StringContent("{\"unauthorized\":true}");
 					return;
 				}
-				resStr = JsonConvert.SerializeObject(resObj);
 			}
 			res.Content = new StringContent(resStr);
 			res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");

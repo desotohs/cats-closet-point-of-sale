@@ -17,34 +17,40 @@ namespace CatsCloset.Apis {
 
 		protected override void Handle(HttpRequestMessage req, HttpResponseMessage res) {
 			AddHeaders(res);
-			if ( req.Method != HttpMethod.Options ) {
+			if (req.Method != HttpMethod.Options) {
 				Task<string> task = req.Content.ReadAsStringAsync();
 				task.Wait();
 				SessionRequest reqObj = JsonConvert.DeserializeObject<SessionRequest>(task.Result);
 				SessionMessage msg;
-				lock ( Context ) {
-					msg = Context.SessionMessages
-					.FirstOrDefault(
-	                    m => m.Id == reqObj.session);
-					if ( msg == null ) {
-						msg = new SessionMessage();
-						msg.Id = reqObj.session;
+				using (Context ctx = new Context()) {
+					msg = ctx.SessionMessages
+						.FirstOrDefault(
+		                    m => m.Id == reqObj.session);
+					if (msg == null || msg.Content == null) {
+						Thread thread = Thread.CurrentThread;
+						Action<SessionSendEvent> action = ev => {
+							if (ev.SessionId == reqObj.session) {
+								res.Content = new StringContent(ev.Data);
+								ev.PreventDefault();
+								thread.Interrupt();
+							}
+						};
+						SessionSend.Sent += action;
+						try {
+							while (true) {
+								Thread.Sleep(int.MaxValue);
+							}
+						} catch {
+						} finally {
+							SessionSend.Sent -= action;
+						}
+					} else {
+						res.Content = new StringContent(msg.Content);
 						msg.Content = null;
-						msg.LastUpdate = DateTime.Now;
-						Context.SessionMessages.Add(msg);
-						Context.SaveChanges();
+						ctx.SaveChanges();
 					}
 				}
-				while ( msg.Content == null ) {
-					Thread.Sleep(10);
-				}
-				res.Content = new StringContent(msg.Content);
-				res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("text/json");
-				lock ( Context ) {
-					msg.Content = null;
-					msg.LastUpdate = DateTime.Now;
-					Context.SaveChanges();
-				}
+				res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 			}
 		}
 

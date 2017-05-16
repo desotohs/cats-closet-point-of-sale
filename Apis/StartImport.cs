@@ -11,7 +11,7 @@ namespace CatsCloset.Apis {
 		protected override ImportResponse Handle(ImportRequest req) {
 			AccessRequire(RequireAuthentication().SettingsAccess);
 			IImporter importer;
-			string error = ImportSystem.StartImport(Convert.FromBase64String(req.data), req.type, Context, out importer);
+			string error = ImportSystem.StartImport(Convert.FromBase64String(req.data), req.type, out importer);
 			if (error != null) {
 				return new ImportResponse(error);
 			}

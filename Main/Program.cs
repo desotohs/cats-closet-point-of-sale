@@ -28,6 +28,7 @@ namespace CatsCloset.Main {
 	public class Program : DelegatingHandler {
 		private const int MaxTries = 5;
 		private const int RetryTimeout = 10;
+		private const double TargetRequestTimeout = 10;
 		private static Context ctx;
 
 		private static void EnsureUserExists() {
@@ -55,27 +56,36 @@ namespace CatsCloset.Main {
 
 		protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
 			return Task.Run(() => {
-				Console.WriteLine(request.RequestUri);
-				Exception[] exs = new Exception[MaxTries];
-				for ( int i = 0; i < MaxTries; ++i ) {
-					try {
-						return ApiFactory.HandleRequest(request, ctx);
-					} catch ( DbEntityValidationException ex ) {
-						foreach ( DbEntityValidationResult result in ex.EntityValidationErrors ) {
-							foreach ( DbValidationError error in result.ValidationErrors ) {
-								Console.WriteLine("Error: {2} in {0}.{1}", result.Entry.Entity.GetType().FullName, error.PropertyName, error.ErrorMessage);
+				DateTime start = DateTime.Now;
+				try {
+					Console.WriteLine(request.RequestUri);
+					Exception[] exs = new Exception[MaxTries];
+					for ( int i = 0; i < MaxTries; ++i ) {
+						try {
+							return ApiFactory.HandleRequest(request);
+						} catch ( DbEntityValidationException ex ) {
+							foreach ( DbEntityValidationResult result in ex.EntityValidationErrors ) {
+								foreach ( DbValidationError error in result.ValidationErrors ) {
+									Console.WriteLine("Error: {2} in {0}.{1}", result.Entry.Entity.GetType().FullName, error.PropertyName, error.ErrorMessage);
+								}
 							}
+						} catch ( Exception ex ) {
+							exs[i] = ex;
+							Thread.Sleep(RetryTimeout);
 						}
-					} catch ( Exception ex ) {
-						exs[i] = ex;
-						Thread.Sleep(RetryTimeout);
+					}
+					Console.Error.WriteLine("Request for {0} crashed {1} times; max. retries failed.", request.RequestUri, MaxTries);
+					foreach ( Exception ex in exs ) {
+						Console.Error.WriteLine(ex);
+					}
+					return new HttpResponseMessage(HttpStatusCode.InternalServerError);
+				} finally {
+					DateTime end = DateTime.Now;
+					double millis = (end - start).TotalMilliseconds;
+					if (millis > TargetRequestTimeout) {
+						Console.Error.WriteLine("Request for {0} took {1}ms", request.RequestUri, millis);
 					}
 				}
-				Console.Error.WriteLine("Request for {0} crashed {1} times; max. retries failed.", request.RequestUri, MaxTries);
-				foreach ( Exception ex in exs ) {
-					Console.Error.WriteLine(ex);
-				}
-				return new HttpResponseMessage(HttpStatusCode.InternalServerError);
 			});
 		}
 

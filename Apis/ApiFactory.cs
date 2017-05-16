@@ -31,11 +31,10 @@ namespace CatsCloset.Apis {
 			}
 		}
 
-		public static HttpResponseMessage HandleRequest(HttpRequestMessage msg, Context ctx) {
+		public static HttpResponseMessage HandleRequest(HttpRequestMessage msg) {
 			EnsureApiListPopulated();
 			HttpResponseMessage res = new HttpResponseMessage(HttpStatusCode.OK);
 			if ( !Apis.Any(a => {
-				a.Context = ctx;
 				return a[msg, res];
 			}) ) {
 				return new HttpResponseMessage(HttpStatusCode.NotFound);

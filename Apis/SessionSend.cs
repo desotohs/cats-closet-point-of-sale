@@ -6,20 +6,28 @@ using CatsCloset.Model.Responses;
 
 namespace CatsCloset.Apis {
 	public class SessionSend : AbstractApi<SessionRequest, StatusResponse> {
+		public static event Action<SessionSendEvent> Sent;
+
 		protected override StatusResponse Handle(SessionRequest req) {
-			lock ( Context ) {
-				SessionMessage msg = Context.SessionMessages
-				.FirstOrDefault(
-                    m => m.Id == req.session);
-				if ( msg == null ) {
-					msg = new SessionMessage();
-					msg.Id = req.session;
+			SessionSendEvent ev = new SessionSendEvent(req.session, req.data);
+			if (Sent != null) {
+				Sent(ev);
+			}
+			if (!ev.DefaultPrevented) {
+				using (Context ctx = new Context()) {
+					SessionMessage msg = ctx.SessionMessages
+						.FirstOrDefault(
+							m => m.Id == req.session);
+					if (msg == null) {
+						msg = new SessionMessage();
+						msg.Id = req.session;
+						msg.LastUpdate = DateTime.Now;
+						ctx.SessionMessages.Add(msg);
+					}
+					msg.Content = req.data;
 					msg.LastUpdate = DateTime.Now;
-					Context.SessionMessages.Add(msg);
+					ctx.SaveChanges();
 				}
-				msg.Content = req.data;
-				msg.LastUpdate = DateTime.Now;
-				Context.SaveChanges();
 			}
 			return new StatusResponse(true);
 		}

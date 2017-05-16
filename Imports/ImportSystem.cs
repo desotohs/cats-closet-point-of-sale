@@ -20,7 +20,7 @@ namespace CatsCloset.Imports {
 			.Cast<IImporter>()
 			.ToArray();
 
-		public static string StartImport(byte[] data, int id, Context ctx, out IImporter importer) {
+		public static string StartImport(byte[] data, int id, out IImporter importer) {
 			IImporter _importer = importer = Importers.FirstOrDefault(i => i.Id == id);
 			if (importer == null) {
 				return "Unknown import type";
@@ -32,7 +32,9 @@ namespace CatsCloset.Imports {
 				ZipFile file = new ZipFile(stream);
 				string err = importer.Init(file);
 				Task.Run(() => {
-					_importer.Run(ctx);
+					using (Context ctx = new Context()) {
+						_importer.Run(ctx);
+					}
 				});
 				return err;
 			}

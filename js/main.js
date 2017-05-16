@@ -67,8 +67,7 @@ function angularInit() {
             angularCallback($scope, $http);
         }
         $scope.openDisplay = function() {
-            sessionStorage.displayToken = $scope.displayToken;
-            open("{{ "/screen" | prepend: site.baseurl }}", "catscloset-display");
+            open("{{ "/screen" | prepend: site.baseurl }}", "catscloset-display").sessionStorage.displayToken = $scope.displayToken;
         };
         window.$scope = $scope;
         window.$http = $http;

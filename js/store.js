@@ -173,13 +173,13 @@ function sufficientPermissions(permissions) {
 }
 
 window.onkeypress = function(e) {
-    if ( store.$scope.shared.local.pinDigit === false ) {
+    if ( location.hash == "" || location.hash == "#step-1" ) {
         if ( e.keyCode == 13 ) {
             store.onBarcodeScan();
         } else if ( e.key.length == 1 ) {
             $("#barcode").val($("#barcode").val() + e.key);
         }
-    } else if ( e.key.length == 1 ) {
+    } else if ( e.key.length == 1 && location.hash == "#step-4" ) {
         store.$scope.$apply(function() {
             store.$scope.shared.local.pinDigit = e.key;
         });
